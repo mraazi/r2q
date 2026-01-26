@@ -1,0 +1,8 @@
+# Google Drive files
+*.gsheet
+*.gdoc
+*.gslides
+
+# System files
+.DS_Store
+Thumbs.db

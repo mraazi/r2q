@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Quran Tracker</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Student Quran Tracker</h1>
+      <p class="subtitle">Track student recitation progress</p>
+    </header>
+
+    <!-- Add Student Form -->
+    <section class="add-student-section">
+      <h2>Add New Student</h2>
+      <form id="addStudentForm" class="add-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="studentName">Student Name</label>
+            <input type="text" id="studentName" placeholder="Enter student name" required>
+          </div>
+          <div class="form-group">
+            <label for="surahSelect">Current Surah</label>
+            <select id="surahSelect" required>
+              <!-- Populated by JavaScript -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pageNumber">Page (1-604)</label>
+            <input type="number" id="pageNumber" min="1" max="604" value="1" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Student</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Google Sheets Sync -->
+    <section class="sync-section">
+      <div class="sync-row">
+        <div class="sync-info">
+          <h2>Google Sheets Backup</h2>
+          <p>Sync student data to Google Sheets for history tracking</p>
+        </div>
+        <div class="sync-buttons">
+          <button id="syncBtn" class="btn btn-success" onclick="syncToGoogleSheets()">
+            Sync to Sheets
+          </button>
+          <button class="btn btn-secondary" onclick="openSettingsModal()">
+            Settings
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Student List -->
+    <section class="student-list-section">
+      <h2>Students <span id="studentCount" class="count-badge">0</span></h2>
+
+      <div class="table-container">
+        <table id="studentTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Surah</th>
+              <th>Page</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentTableBody">
+            <!-- Populated by JavaScript -->
+          </tbody>
+        </table>
+
+        <div id="emptyState" class="empty-state">
+          <p>No students added yet.</p>
+          <p>Add your first student above!</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Student</h3>
+        <button class="close-btn" onclick="closeEditModal()">&times;</button>
+      </div>
+      <form id="editStudentForm">
+        <input type="hidden" id="editStudentId">
+        <div class="form-group">
+          <label for="editStudentName">Student Name</label>
+          <input type="text" id="editStudentName" required>
+        </div>
+        <div class="form-group">
+          <label for="editSurahSelect">Current Surah</label>
+          <select id="editSurahSelect" required>
+            <!-- Populated by JavaScript -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editPageNumber">Page (1-604)</label>
+          <input type="number" id="editPageNumber" min="1" max="604" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h3>Delete Student</h3>
+        <button class="close-btn" onclick="closeDeleteModal()">&times;</button>
+      </div>
+      <p>Are you sure you want to delete <strong id="deleteStudentName"></strong>?</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Google Sheets Settings</h3>
+        <button class="close-btn" onclick="closeSettingsModal()">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="scriptUrl">Google Apps Script URL</label>
+        <input type="url" id="scriptUrl" placeholder="https://script.google.com/macros/s/...">
+        <p class="help-text">
+          Deploy the Google Apps Script and paste the web app URL here.
+          <br>See <code>google-apps-script.js</code> for the script code.
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeSettingsModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveScriptUrl()">Save URL</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/quran-data.js"></script>
+  <script src="js/page-mapping.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
