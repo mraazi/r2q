@@ -1,6 +1,6 @@
 // Storage keys for localStorage
 const STORAGE_KEY = 'quran_students';
-const SETTINGS_KEY = 'quran_tracker_settings';
+
 
 // State
 let students = [];
@@ -263,101 +263,7 @@ function setupEventListeners() {
   });
 }
 
-// ============================================
-// Google Sheets Sync Functions
-// ============================================
-
-// Load settings
-function loadSettings() {
-  const stored = localStorage.getItem(SETTINGS_KEY);
-  return stored ? JSON.parse(stored) : { scriptUrl: '' };
-}
-
-// Save settings
-function saveSettings(settings) {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-}
-
-// Open settings modal
-function openSettingsModal() {
-  const settings = loadSettings();
-  document.getElementById('scriptUrl').value = settings.scriptUrl || '';
-  document.getElementById('settingsModal').classList.add('active');
-}
-
-// Close settings modal
-function closeSettingsModal() {
-  document.getElementById('settingsModal').classList.remove('active');
-}
-
-// Save script URL
-function saveScriptUrl() {
-  const url = document.getElementById('scriptUrl').value.trim();
-  saveSettings({ scriptUrl: url });
-  closeSettingsModal();
-  updateSyncButtonState();
-}
-
-// Update sync button state based on whether URL is configured
-function updateSyncButtonState() {
-  const settings = loadSettings();
-  const syncBtn = document.getElementById('syncBtn');
-  if (syncBtn) {
-    syncBtn.disabled = !settings.scriptUrl;
-    syncBtn.title = settings.scriptUrl ? 'Sync to Google Sheets' : 'Configure Google Sheets URL first';
-  }
-}
-
-// Sync to Google Sheets
-async function syncToGoogleSheets() {
-  const settings = loadSettings();
-
-  if (!settings.scriptUrl) {
-    alert('Please configure your Google Sheets URL first (click Settings)');
-    return;
-  }
-
-  const syncBtn = document.getElementById('syncBtn');
-  const originalText = syncBtn.textContent;
-  syncBtn.textContent = 'Syncing...';
-  syncBtn.disabled = true;
-
-  try {
-    // Prepare data with surah names
-    const dataToSync = students.map(s => ({
-      name: s.name,
-      surah: s.surah,
-      surahName: getSurah(s.surah)?.latin || '',
-      page: s.page
-    }));
-
-    const response = await fetch(settings.scriptUrl, {
-      method: 'POST',
-      mode: 'no-cors', // Google Apps Script requires this
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        action: 'sync',
-        students: dataToSync,
-        timestamp: new Date().toISOString()
-      })
-    });
-
-    // With no-cors, we can't read the response, so assume success
-    alert('Data sent to Google Sheets! Check your sheet to verify.');
-
-  } catch (error) {
-    console.error('Sync error:', error);
-    alert('Error syncing: ' + error.message);
-  } finally {
-    syncBtn.textContent = originalText;
-    syncBtn.disabled = false;
-  }
-}
-
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   init();
-  updateSyncButtonState();
 });
