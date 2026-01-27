@@ -28,9 +28,9 @@ function init() {
 
 // Default students (pre-loaded)
 const DEFAULT_STUDENTS = [
-  { id: 'student_ariz', name: 'Ariz', surah: 1, page: 1 },
-  { id: 'student_raza', name: 'Raza', surah: 1, page: 1 },
-  { id: 'student_rayyan', name: 'Rayyan', surah: 1, page: 1 }
+  { id: 'student_ariz', name: 'Ariz', surah: 1, page: 1, lastModified: null },
+  { id: 'student_raza', name: 'Raza', surah: 1, page: 1, lastModified: null },
+  { id: 'student_rayyan', name: 'Rayyan', surah: 1, page: 1, lastModified: null }
 ];
 
 // Load students from localStorage
@@ -92,8 +92,13 @@ function renderStudents() {
         </td>
         <td>
           <div class="page-display">
+            <button class="btn-page" onclick="changePage('${student.id}', -1)">&minus;</button>
             <span class="page-number">${student.page}</span>
+            <button class="btn-page" onclick="changePage('${student.id}', 1)">+</button>
           </div>
+        </td>
+        <td>
+          <span class="last-modified">${formatDate(student.lastModified)}</span>
         </td>
         <td>
           <div class="action-buttons">
@@ -120,13 +125,41 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+// Format date for display
+function formatDate(dateStr) {
+  if (!dateStr) return '-';
+  const d = new Date(dateStr);
+  const day = d.getDate().toString().padStart(2, '0');
+  const mon = (d.getMonth() + 1).toString().padStart(2, '0');
+  const yr = d.getFullYear();
+  const hr = d.getHours().toString().padStart(2, '0');
+  const min = d.getMinutes().toString().padStart(2, '0');
+  return `${day}/${mon}/${yr} ${hr}:${min}`;
+}
+
+// Change page by delta (+1 or -1)
+function changePage(id, delta) {
+  const index = students.findIndex(s => s.id === id);
+  if (index === -1) return;
+
+  const newPage = students[index].page + delta;
+  if (newPage < 1 || newPage > 604) return;
+
+  students[index].page = newPage;
+  students[index].surah = getPageSurah(newPage);
+  students[index].lastModified = new Date().toISOString();
+  saveStudents();
+  renderStudents();
+}
+
 // Add new student
 function addStudent(name, surah, page) {
   const student = {
     id: generateId(),
     name: name.trim(),
     surah: parseInt(surah),
-    page: parseInt(page)
+    page: parseInt(page),
+    lastModified: new Date().toISOString()
   };
 
   students.push(student);
@@ -141,6 +174,7 @@ function updateStudent(id, name, surah, page) {
     students[index].name = name.trim();
     students[index].surah = parseInt(surah);
     students[index].page = parseInt(page);
+    students[index].lastModified = new Date().toISOString();
     saveStudents();
     renderStudents();
   }

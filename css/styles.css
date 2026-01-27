@@ -374,3 +374,33 @@ table.hidden,
   color: #1a5f4a;
 }
 
+/* Page +/- buttons */
+.btn-page {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f8f9fa;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: #333;
+}
+
+.btn-page:hover {
+  background: #1a5f4a;
+  color: white;
+  border-color: #1a5f4a;
+}
+
+/* Last modified */
+.last-modified {
+  font-size: 0.8rem;
+  color: #888;
+  white-space: nowrap;
+}
+
