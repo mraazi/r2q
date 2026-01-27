@@ -63,38 +63,6 @@
       </div>
     </section>
   </div>
-
-  <!-- Edit Modal -->
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Edit Student</h3>
-        <button class="close-btn" onclick="closeEditModal()">&times;</button>
-      </div>
-      <form id="editStudentForm">
-        <input type="hidden" id="editStudentId">
-        <div class="form-group">
-          <label for="editStudentName">Student Name</label>
-          <input type="text" id="editStudentName" required>
-        </div>
-        <div class="form-group">
-          <label for="editSurahSelect">Current Surah</label>
-          <select id="editSurahSelect" required>
-            <!-- Populated by JavaScript -->
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="editPageNumber">Page (1-604)</label>
-          <input type="number" id="editPageNumber" min="1" max="604" required>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <!-- Delete Confirmation Modal -->
   <div id="deleteModal" class="modal">
     <div class="modal-content modal-small">

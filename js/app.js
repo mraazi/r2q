@@ -13,10 +13,7 @@ const studentTable = document.getElementById('studentTable');
 const emptyState = document.getElementById('emptyState');
 const studentCount = document.getElementById('studentCount');
 const surahSelect = document.getElementById('surahSelect');
-const editSurahSelect = document.getElementById('editSurahSelect');
-const editModal = document.getElementById('editModal');
 const deleteModal = document.getElementById('deleteModal');
-const editStudentForm = document.getElementById('editStudentForm');
 
 // Initialize app
 function init() {
@@ -38,6 +35,15 @@ function loadStudents() {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     students = JSON.parse(stored);
+    // Backfill lastModified for students migrated from older data
+    let needsSave = false;
+    students.forEach(s => {
+      if (!s.lastModified) {
+        s.lastModified = new Date().toISOString();
+        needsSave = true;
+      }
+    });
+    if (needsSave) saveStudents();
   } else {
     // First time: load default students
     students = DEFAULT_STUDENTS;
@@ -57,7 +63,6 @@ function populateSurahDropdowns() {
   ).join('');
 
   surahSelect.innerHTML = options;
-  editSurahSelect.innerHTML = options;
 }
 
 // Generate unique ID
@@ -104,9 +109,6 @@ function renderStudents() {
           <div class="action-buttons">
             <button class="btn btn-quran btn-sm" onclick="openQuran(${student.page})">
               Open Quran
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="openEditModal('${student.id}')">
-              Edit
             </button>
             <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${student.id}')">
               Delete
@@ -167,19 +169,6 @@ function addStudent(name, surah, page) {
   renderStudents();
 }
 
-// Update student
-function updateStudent(id, name, surah, page) {
-  const index = students.findIndex(s => s.id === id);
-  if (index !== -1) {
-    students[index].name = name.trim();
-    students[index].surah = parseInt(surah);
-    students[index].page = parseInt(page);
-    students[index].lastModified = new Date().toISOString();
-    saveStudents();
-    renderStudents();
-  }
-}
-
 // Delete student
 function deleteStudent(id) {
   students = students.filter(s => s.id !== id);
@@ -194,22 +183,6 @@ function openQuran(page) {
 }
 
 // Modal functions
-function openEditModal(id) {
-  const student = students.find(s => s.id === id);
-  if (!student) return;
-
-  document.getElementById('editStudentId').value = student.id;
-  document.getElementById('editStudentName').value = student.name;
-  document.getElementById('editSurahSelect').value = student.surah;
-  document.getElementById('editPageNumber').value = student.page;
-
-  editModal.classList.add('active');
-}
-
-function closeEditModal() {
-  editModal.classList.remove('active');
-}
-
 function openDeleteModal(id) {
   const student = students.find(s => s.id === id);
   if (!student) return;
@@ -248,24 +221,7 @@ function setupEventListeners() {
     document.getElementById('pageNumber').value = 1;
   });
 
-  // Edit student form
-  editStudentForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const id = document.getElementById('editStudentId').value;
-    const name = document.getElementById('editStudentName').value;
-    const surah = document.getElementById('editSurahSelect').value;
-    const page = document.getElementById('editPageNumber').value;
-
-    updateStudent(id, name, surah, page);
-    closeEditModal();
-  });
-
   // Close modals when clicking outside
-  editModal.addEventListener('click', (e) => {
-    if (e.target === editModal) closeEditModal();
-  });
-
   deleteModal.addEventListener('click', (e) => {
     if (e.target === deleteModal) closeDeleteModal();
   });
@@ -273,7 +229,6 @@ function setupEventListeners() {
   // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      closeEditModal();
       closeDeleteModal();
     }
   });
@@ -287,14 +242,6 @@ function setupEventListeners() {
     }
   });
 
-  // Auto-update surah when page changes (for edit form)
-  document.getElementById('editPageNumber').addEventListener('change', (e) => {
-    const page = parseInt(e.target.value);
-    if (page >= 1 && page <= 604) {
-      const surah = getPageSurah(page);
-      document.getElementById('editSurahSelect').value = surah;
-    }
-  });
 }
 
 // Initialize when DOM is ready
