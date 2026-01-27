@@ -1,5 +1,6 @@
 // Storage keys for localStorage
 const STORAGE_KEY = 'quran_students';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdqXriTb7zJVDtTexnLSHQQBi0briGfFtZGvTfoL0pzahIXxFnxUVmwSzcMhaTganGiA/exec';
 
 
 // State
@@ -139,6 +140,26 @@ function formatDate(dateStr) {
   return `${day}/${mon}/${yr} ${hr}:${min}`;
 }
 
+// Log attendance to Google Sheets (fire-and-forget)
+function logAttendance(student) {
+  const surah = getSurah(student.surah);
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'sync',
+      students: [{
+        name: student.name,
+        surah: student.surah,
+        surahName: surah?.latin || '',
+        page: student.page
+      }],
+      timestamp: new Date().toISOString()
+    })
+  }).catch(() => {});
+}
+
 // Change page by delta (+1 or -1)
 function changePage(id, delta) {
   const index = students.findIndex(s => s.id === id);
@@ -152,6 +173,7 @@ function changePage(id, delta) {
   students[index].lastModified = new Date().toISOString();
   saveStudents();
   renderStudents();
+  logAttendance(students[index]);
 }
 
 // Add new student
