@@ -48,15 +48,39 @@ function doPost(e) {
 }
 
 /**
- * Handle GET requests (for testing)
+ * Handle GET requests - returns latest page per student
  */
 function doGet(e) {
-  return ContentService
-    .createTextOutput(JSON.stringify({
-      success: true,
-      message: 'Quran Tracker API is running. Use POST to sync data.'
-    }))
-    .setMimeType(ContentService.MimeType.JSON);
+  try {
+    const sheet = getOrCreateSheet();
+    const data = sheet.getDataRange().getValues();
+
+    // Skip header row, find latest entry per student (rows are chronological)
+    const latestByStudent = {};
+    for (let i = 1; i < data.length; i++) {
+      const [date, time, name, surahName, page] = data[i];
+      if (name) {
+        latestByStudent[name] = {
+          name: name,
+          surahName: surahName,
+          page: parseInt(page),
+          lastModified: date + 'T' + time
+        };
+      }
+    }
+
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        success: true,
+        students: Object.values(latestByStudent)
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: false, error: error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 /**

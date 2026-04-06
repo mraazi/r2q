@@ -17,11 +17,12 @@ const surahSelect = document.getElementById('surahSelect');
 const deleteModal = document.getElementById('deleteModal');
 
 // Initialize app
-function init() {
+async function init() {
   loadStudents();
   populateSurahDropdowns();
   renderStudents();
   setupEventListeners();
+  await syncFromSheets();
 }
 
 // Default students (pre-loaded)
@@ -138,6 +139,33 @@ function formatDate(dateStr) {
   const hr = d.getHours().toString().padStart(2, '0');
   const min = d.getMinutes().toString().padStart(2, '0');
   return `${day}/${mon}/${yr} ${hr}:${min}`;
+}
+
+// Load latest page data from Google Sheets and update local state
+async function syncFromSheets() {
+  try {
+    const res = await fetch(SCRIPT_URL, { method: 'GET' });
+    const data = await res.json();
+    if (!data.success || !data.students || data.students.length === 0) return;
+
+    let changed = false;
+    data.students.forEach(sheetStudent => {
+      const local = students.find(s => s.name.toLowerCase() === sheetStudent.name.toLowerCase());
+      if (local && sheetStudent.page !== local.page) {
+        local.page = sheetStudent.page;
+        local.surah = getPageSurah(sheetStudent.page);
+        local.lastModified = sheetStudent.lastModified || local.lastModified;
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      saveStudents();
+      renderStudents();
+    }
+  } catch (e) {
+    // Silently ignore — offline or script not set up
+  }
 }
 
 // Log attendance to Google Sheets (fire-and-forget)
