@@ -40,7 +40,7 @@ function loadStudents() {
     // Backfill lastModified for students migrated from older data
     let needsSave = false;
     students.forEach(s => {
-      if (!s.lastModified) {
+      if (!s.lastModified || isNaN(new Date(s.lastModified))) {
         s.lastModified = new Date().toISOString();
         needsSave = true;
       }
@@ -151,11 +151,16 @@ async function syncFromSheets() {
     let changed = false;
     data.students.forEach(sheetStudent => {
       const local = students.find(s => s.name.toLowerCase() === sheetStudent.name.toLowerCase());
-      if (local && sheetStudent.page !== local.page) {
-        local.page = sheetStudent.page;
-        local.surah = getPageSurah(sheetStudent.page);
-        local.lastModified = sheetStudent.lastModified || local.lastModified;
-        changed = true;
+      if (local) {
+        if (sheetStudent.page !== local.page) {
+          local.page = sheetStudent.page;
+          local.surah = getPageSurah(sheetStudent.page);
+          changed = true;
+        }
+        if (sheetStudent.lastModified && !isNaN(new Date(sheetStudent.lastModified))) {
+          local.lastModified = sheetStudent.lastModified;
+          changed = true;
+        }
       }
     });
 
