@@ -94,6 +94,29 @@ function doGet(e) {
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
 }
 
+// ============================== JSON API (for the GitHub Pages site) ==============================
+// The static site POSTs {fn, args} as text/plain (avoids a CORS preflight) and gets {ok, result|error} back.
+
+function doPost(e) {
+  var out;
+  try {
+    var req = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    var fns = {
+      api_signIn: api_signIn, api_bootstrap: api_bootstrap, api_saveStudent: api_saveStudent,
+      api_resetToken: api_resetToken, api_saveSession: api_saveSession, api_deleteSession: api_deleteSession,
+      api_saveTajweed: api_saveTajweed, api_saveMonth: api_saveMonth, api_deleteMonth: api_deleteMonth,
+      api_deleteTajweedEntry: api_deleteTajweedEntry, api_saveSettings: api_saveSettings,
+      getParentView: getParentView
+    };
+    var fn = String(req.fn || '');
+    if (!Object.prototype.hasOwnProperty.call(fns, fn)) throw new Error('Unknown action.');
+    out = { ok: true, result: fns[fn].apply(null, req.args || []) };
+  } catch (err) {
+    out = { ok: false, error: (err && err.message) || String(err) };
+  }
+  return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
+}
+
 // ============================== PUBLIC API (called via google.script.run) ==============================
 // Every teacher function takes the admin key first and rejects anything else.
 

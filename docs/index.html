@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F0E8; --surface:#FFFDF8; --surface-2:#FAF6EE; --line:#E6DECF; --line-2:#D8CDB8;
+  --ink:#2D2B27; --ink-2:#5E584E; --ink-3:#8A8275;
+  --teal:#2F6B5E; --teal-2:#3D7A6B; --teal-soft:#E3EEE9; --sage:#7FA38F;
+  --gold:#B8963E; --gold-soft:#F3EBD6;
+  --absent:#A9503A; --absent-soft:#F6E4DE;
+  --repl:#9A7A28; --repl-soft:#F3EAD2;
+  --st0:#E8E1D3; --st1:#C7DCD2; --st2:#8FB5A3; --st3:#4E8C79; --st4:#2F6B5E;
+  --r:14px; --shadow:0 1px 2px rgba(60,48,25,.06),0 4px 16px rgba(60,48,25,.05);
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --ar:'Amiri','Traditional Arabic',serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--teal)}
+.hidden{display:none!important}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;margin:0}
+.muted{color:var(--ink-3)} .small{font-size:13px}
+.ar{font-family:var(--ar);font-size:1.15em;direction:rtl}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+/* Header */
+.top{background:var(--teal);color:#fff;position:relative;overflow:hidden}
+.top:before{content:"";position:absolute;inset:0;opacity:.09;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.2'%3E%3Crect x='16' y='16' width='24' height='24'/%3E%3Crect x='16' y='16' width='24' height='24' transform='rotate(45 28 28)'/%3E%3C/g%3E%3C/svg%3E")}
+.top .wrap{position:relative;display:flex;align-items:center;gap:12px;min-height:60px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:19px;font-weight:600;margin-right:auto;white-space:nowrap}
+.brand svg{flex:none}
+.nav{display:flex;gap:4px}
+.nav button{background:none;border:0;color:#fff;opacity:.78;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:500}
+.nav button:hover{opacity:1;background:rgba(255,255,255,.1)}
+.nav button.on{opacity:1;background:rgba(255,255,255,.16)}
+.top .btn-gold{background:var(--gold);color:#fff;border:0}
+.top .btn-gold:hover{background:#a8872f}
+.goldrule{height:3px;background:linear-gradient(90deg,var(--gold),#d9c07a,var(--gold))}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line-2);background:var(--surface);padding:9px 14px;border-radius:10px;cursor:pointer;font-weight:500;text-decoration:none;color:var(--ink);white-space:nowrap;min-height:40px}
+.btn:hover{border-color:var(--ink-3)}
+.btn-primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn-primary:hover{background:#285d52;border-color:#285d52}
+.btn-ghost{background:none;border-color:transparent}
+.btn-danger{color:var(--absent);border-color:#e3c4ba}
+.btn-sm{padding:6px 10px;min-height:32px;font-size:13px;border-radius:8px}
+.btn[disabled]{opacity:.55;cursor:default}
+.iconbtn{width:40px;height:40px;padding:0;border-radius:10px}
+
+/* Layout */
+main{padding:20px 0 60px}
+.pagehead{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.pagehead h1{font-size:26px;line-height:1.2}
+.pagehead .grow{flex:1;min-width:200px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:16px}
+.grid{display:grid;gap:14px}
+.cards{grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+.tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:18px}
+.tile{padding:14px 16px}
+.tile .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600}
+.tile .val{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1.15;margin-top:4px}
+.tile .sub{font-size:13px;color:var(--ink-2);margin-top:2px}
+.section-title{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+.section-title h2{font-size:18px}
+.section-title .line{flex:1;height:1px;background:var(--line)}
+
+/* Month bar */
+.monthbar{display:inline-flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px}
+.monthbar button{border:0;background:none;width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:18px;color:var(--ink-2)}
+.monthbar button:hover:not([disabled]){background:var(--surface-2)}
+.monthbar button[disabled]{opacity:.3;cursor:default}
+.monthbar .m{min-width:140px;text-align:center;font-weight:600}
+
+/* Student card */
+.scard{padding:16px;cursor:pointer;transition:border-color .15s, transform .15s;display:flex;flex-direction:column;gap:12px}
+.scard:hover{border-color:var(--sage)}
+.scard .nm{font-family:var(--serif);font-size:18px;font-weight:600;line-height:1.25}
+.scard .row{display:flex;align-items:center;gap:10px}
+.scard .stop{font-size:14px;color:var(--ink-2)}
+.scard .stop b{color:var(--ink);font-weight:600}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
+.badge.off{background:#f1ece2;color:var(--ink-3)}
+
+/* Attendance dots & chips */
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dot{width:22px;height:22px;border-radius:50%;border:1.5px dashed var(--line-2);display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff}
+.dot.P{background:var(--teal);border:0}
+.dot.R{background:var(--gold);border:0}
+.dot.A{background:var(--surface);border:1.5px solid var(--absent);color:var(--absent)}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.chip.Present{background:var(--teal-soft);color:var(--teal)}
+.chip.Absent{background:var(--absent-soft);color:var(--absent)}
+.chip.Replacement{background:var(--repl-soft);color:var(--repl)}
+.chip:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+
+/* Tajweed status */
+.sbar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--st0);gap:2px}
+.sbar i{display:block;height:100%}
+.st{display:inline-flex;align-items:center;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.st.s0{background:var(--surface);color:var(--ink-3);border-color:var(--line);border-style:dashed}
+.st.s1{background:var(--st1);color:#244a40}
+.st.s2{background:var(--st2);color:#15332b}
+.st.s3{background:var(--st3);color:#fff}
+.st.s4{background:var(--st4);color:#fff}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:18px 0 18px;overflow-x:auto}
+.tabs button{background:none;border:0;padding:10px 14px;font-weight:600;color:var(--ink-3);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button.on{color:var(--teal);border-bottom-color:var(--gold)}
+
+/* Tables & lists */
+.list{display:flex;flex-direction:column}
+.li{display:grid;grid-template-columns:110px 1fr auto;gap:10px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}
+.li:first-child{border-top:0}
+.li .d{font-weight:600;font-size:14px}
+.li .d small{display:block;font-weight:400;color:var(--ink-3)}
+.li .body{min-width:0}
+.li .notes{font-size:13px;color:var(--ink-2);margin-top:2px;overflow-wrap:anywhere}
+.empty{padding:28px 16px;text-align:center;color:var(--ink-3)}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);text-align:left;font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t td{padding:10px 12px;border-bottom:1px solid var(--line)}
+table.t tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.scroll-x{overflow-x:auto}
+
+/* Tajweed groups */
+.tgroup{margin-bottom:14px;overflow:hidden}
+.tgroup-h{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.tgroup-h h3{font-size:16px}
+.tsub{padding:7px 16px;background:var(--gold-soft);font-size:13px;font-weight:600;color:#6d5620;border-bottom:1px solid var(--line)}
+.trow{display:grid;grid-template-columns:minmax(150px,1.1fr) 120px 2fr;gap:12px;align-items:start;padding:10px 16px;border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:0}
+.trow .tn{font-weight:500}
+.trow .tn .n{display:inline-block;width:22px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.trow .rem{font-size:14px;color:var(--ink-2);overflow-wrap:anywhere}
+.trow .rem small{display:block;color:var(--ink-3);font-size:12px}
+.trow.changed{background:#fbf7ec}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px}
+.seg button{border:1px solid var(--line-2);background:var(--surface);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink-2)}
+.seg button.on.s1{background:var(--st1);border-color:var(--st1);color:#244a40}
+.seg button.on.s2{background:var(--st2);border-color:var(--st2);color:#15332b}
+.seg button.on.s3{background:var(--st3);border-color:var(--st3);color:#fff}
+.seg button.on.s4{background:var(--st4);border-color:var(--st4);color:#fff}
+.trow.edit{grid-template-columns:minmax(150px,1fr) auto minmax(180px,1.4fr)}
+.trow.edit input{width:100%}
+.editbar{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;margin-bottom:14px;background:#fffaf0;border:1px solid #e7d7aa;border-radius:12px;box-shadow:var(--shadow)}
+.editbar .grow{flex:1}
+
+/* Forms */
+label.f,div.f{display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:12px}
+label.f > span,div.f > span{display:block;margin-bottom:5px}
+input.i,select.i,textarea.i{width:100%;border:1px solid var(--line-2);background:#fff;border-radius:10px;padding:9px 11px;min-height:42px;font-weight:400;color:var(--ink)}
+textarea.i{min-height:70px;resize:vertical}
+input.i:focus,select.i:focus,textarea.i:focus{outline:2px solid var(--sage);outline-offset:0;border-color:var(--sage)}
+.frow{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.radios{display:flex;gap:6px;flex-wrap:wrap}
+.radios label{flex:1;min-width:92px}
+.radios input{position:absolute;opacity:0;pointer-events:none}
+.radios span{display:block;text-align:center;padding:9px 8px;border:1px solid var(--line-2);border-radius:10px;cursor:pointer;font-weight:600;background:#fff;color:var(--ink-2)}
+.radios input:checked + span.Present{background:var(--teal);border-color:var(--teal);color:#fff}
+.radios input:checked + span.Absent{background:var(--absent);border-color:var(--absent);color:#fff}
+.radios input:checked + span.Replacement{background:var(--gold);border-color:var(--gold);color:#fff}
+.radios input:checked + span.opt{background:var(--teal);border-color:var(--teal);color:#fff}
+.badge.plan{background:var(--teal-soft);border-color:#cfe0d8;color:var(--teal)}
+.badge.done{background:var(--gold-soft);border-color:#e7d7aa;color:#6d5620}
+.mstrip{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;margin-bottom:12px;scrollbar-width:thin}
+.mchip{border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:7px 13px;font-weight:600;font-size:13px;white-space:nowrap;cursor:pointer;color:var(--ink-2);flex:none}
+.mchip:hover{border-color:var(--sage)}
+.mchip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.mchip.ghost{border-style:dashed;color:var(--ink-3)}
+.mchip.add{border-style:dashed;color:var(--teal);background:none}
+.mchip .ck{color:var(--gold);margin-left:4px}
+.mchip.on .ck{color:#f3dc95}
+.monthcard{padding:16px;margin-bottom:6px}
+.monthcard .mh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.monthcard .mh h2{font-size:20px;margin-right:auto}
+.mfacts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:12px;font-size:14px;color:var(--ink-2)}
+.mfacts b{color:var(--ink);font-size:16px}
+.mremark{margin-top:12px;padding:10px 12px;border-left:3px solid var(--gold);background:var(--surface-2);border-radius:0 10px 10px 0;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.pgrange{font-weight:600}
+.pgrange .adv{color:var(--teal);font-weight:600;font-size:13px;margin-left:4px}
+.radios input:focus-visible + span{outline:2px solid var(--sage)}
+.stepper{display:flex;gap:6px}
+.stepper input{text-align:center;font-weight:600;font-size:17px}
+.hint{font-size:13px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 11px;margin:-4px 0 12px}
+.hint.warn{background:#fff6e5;border-color:#ecd8a8;color:#6d5620}
+.hint button{margin-left:6px}
+.err{color:var(--absent);font-size:13px;margin:4px 0 10px;min-height:1px}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(35,30,20,.42);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.sheet{background:var(--surface);border-radius:18px;width:100%;max-width:520px;max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 6px}
+.sheet-h h2{font-size:20px}
+.sheet-b{padding:10px 18px 4px}
+.sheet-f{display:flex;gap:8px;justify-content:flex-end;padding:8px 18px 18px;flex-wrap:wrap}
+.sheet-f .left{margin-right:auto}
+@media (max-width:640px){
+  .modal{align-items:flex-end;padding:0}
+  .sheet{border-radius:18px 18px 0 0;max-height:92vh}
+}
+
+/* Progress rail */
+.rail{position:relative;height:12px;border-radius:999px;background:var(--st0);overflow:hidden;margin:10px 0 6px}
+.rail .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--teal-2),var(--teal));border-radius:999px}
+.rail .tick{position:absolute;top:0;bottom:0;width:2px;background:var(--surface)}
+.railscale{position:relative;height:16px;font-size:11px;color:var(--ink-3)}
+.railscale span{position:absolute;top:0;white-space:nowrap}
+.railscale span:last-child{transform:translateX(-30%)}
+
+/* Chart */
+.chart{position:relative}
+.chart svg{display:block;width:100%}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-115%);opacity:0;transition:opacity .1s}
+
+/* Attendance slots */
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.slot{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface)}
+.slot .k{font-size:12px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.slot .v{font-weight:600;margin:3px 0 5px}
+.slot.emptyslot{border-style:dashed;background:transparent}
+.slot.click{cursor:pointer}
+.slot.click:hover{border-color:var(--sage)}
+
+/* Register */
+.reg td,.reg th{text-align:center}
+.reg td:first-child,.reg th:first-child{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1}
+.cellbtn{width:30px;height:30px;border-radius:8px;border:1px dashed var(--line-2);background:none;cursor:pointer;font-weight:700;font-size:12px}
+.cellbtn.P{background:var(--teal);color:#fff;border:0}
+.cellbtn.R{background:var(--gold);color:#fff;border:0}
+.cellbtn.A{background:var(--absent-soft);color:var(--absent);border:1px solid #e3c4ba}
+
+/* Misc */
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:60;box-shadow:0 8px 30px rgba(0,0,0,.25);max-width:calc(100% - 32px)}
+.toast.bad{background:var(--absent)}
+.busybar{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;overflow:hidden}
+.busybar:before{content:"";position:absolute;inset:0;width:40%;background:var(--gold);animation:bb 1s infinite ease-in-out}
+@keyframes bb{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+.center{min-height:80vh;display:grid;place-items:center;padding:20px}
+.signin{max-width:380px;width:100%;padding:28px;text-align:center}
+.signin h1{font-size:24px;margin:12px 0 6px}
+.back{background:none;border:0;color:var(--teal);font-weight:600;cursor:pointer;padding:0;margin-bottom:10px}
+.linkbox{display:flex;gap:6px}
+.linkbox input{font-size:13px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border-bottom:0}
+.changes li{margin:3px 0;font-size:14px}
+.foot{text-align:center;color:var(--ink-3);font-size:12px;margin-top:30px}
+
+@media (max-width:640px){
+  body{font-size:15px}
+  .pagehead h1{font-size:22px}
+  .brand{font-size:17px}
+  .nav{order:3;width:100%;justify-content:space-between}
+  .nav button{flex:1}
+  .li{grid-template-columns:84px 1fr auto;padding:12px}
+  .trow,.trow.edit{grid-template-columns:1fr auto;gap:6px 10px}
+  .trow .rem{grid-column:1 / -1}
+  .trow.edit .seg{grid-column:1 / -1}
+  .trow.edit input{grid-column:1 / -1}
+  .frow{grid-template-columns:1fr 1fr}
+  .tile .val{font-size:24px}
+}
+@media print{
+  .top,.nav,.btn,.monthbar button,.tabs{display:none!important}
+  body{background:#fff}
+  .card{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modal"></div>
+<script>
+var API_URL = 'https://script.google.com/macros/s/AKfycby87_agHWELKjoX_EH78yTyls9rMFS_P8iQiWBwRtzbtsiWhD-w_zqU2oaiO--BWt0r/exec';
+var PAGE_URL = location.origin + location.pathname;
+var BOOT = (function () {
+  var p = new URLSearchParams(location.search);
+  if (p.get('s')) return { mode: 'parent', token: p.get('s'), url: PAGE_URL };
+  if (p.get('admin')) return { mode: 'teacher', key: p.get('admin'), url: PAGE_URL };
+  return { mode: 'signin', url: PAGE_URL };
+})();
+</script>
+<script>
+const PAGES = [[1,1],[2,1],[2,6],[2,17],[2,25],[2,30],[2,38],[2,49],[2,58],[2,62],[2,70],[2,77],[2,84],[2,89],[2,94],[2,102],[2,106],[2,113],[2,120],[2,127],[2,135],[2,142],[2,146],[2,154],[2,164],[2,170],[2,177],[2,182],[2,187],[2,191],[2,197],[2,203],[2,211],[2,216],[2,220],[2,225],[2,231],[2,234],[2,238],[2,246],[2,249],[2,253],[2,257],[2,260],[2,265],[2,270],[2,275],[2,282],[2,283],[3,1],[3,10],[3,16],[3,23],[3,30],[3,38],[3,46],[3,53],[3,62],[3,71],[3,78],[3,84],[3,92],[3,101],[3,109],[3,116],[3,122],[3,133],[3,141],[3,149],[3,154],[3,158],[3,166],[3,174],[3,181],[3,187],[3,195],[4,1],[4,7],[4,12],[4,15],[4,20],[4,24],[4,27],[4,34],[4,38],[4,45],[4,52],[4,60],[4,66],[4,75],[4,80],[4,87],[4,92],[4,95],[4,102],[4,106],[4,114],[4,122],[4,128],[4,135],[4,141],[4,148],[4,155],[4,163],[4,171],[4,176],[5,3],[5,6],[5,10],[5,14],[5,18],[5,24],[5,32],[5,37],[5,42],[5,46],[5,51],[5,58],[5,65],[5,71],[5,77],[5,83],[5,90],[5,96],[5,104],[5,109],[5,114],[6,1],[6,9],[6,19],[6,28],[6,36],[6,45],[6,53],[6,60],[6,69],[6,74],[6,82],[6,91],[6,95],[6,102],[6,111],[6,119],[6,125],[6,132],[6,138],[6,143],[6,147],[6,152],[6,158],[7,1],[7,12],[7,23],[7,31],[7,38],[7,44],[7,52],[7,58],[7,68],[7,74],[7,82],[7,88],[7,96],[7,105],[7,121],[7,131],[7,138],[7,144],[7,150],[7,156],[7,160],[7,164],[7,171],[7,179],[7,188],[7,196],[8,1],[8,9],[8,17],[8,26],[8,34],[8,41],[8,46],[8,53],[8,62],[8,70],[9,1],[9,7],[9,14],[9,21],[9,27],[9,32],[9,37],[9,41],[9,48],[9,55],[9,62],[9,69],[9,73],[9,80],[9,87],[9,94],[9,100],[9,107],[9,112],[9,118],[9,123],[10,1],[10,7],[10,15],[10,21],[10,26],[10,34],[10,43],[10,54],[10,62],[10,71],[10,79],[10,89],[10,98],[10,107],[11,6],[11,13],[11,20],[11,29],[11,38],[11,46],[11,54],[11,63],[11,72],[11,82],[11,89],[11,98],[11,109],[11,118],[12,5],[12,15],[12,23],[12,31],[12,38],[12,44],[12,53],[12,64],[12,70],[12,79],[12,87],[12,96],[12,104],[13,1],[13,6],[13,14],[13,19],[13,29],[13,35],[13,43],[14,6],[14,11],[14,19],[14,25],[14,34],[14,43],[15,1],[15,16],[15,32],[15,52],[15,71],[15,91],[16,7],[16,15],[16,27],[16,35],[16,43],[16,55],[16,65],[16,73],[16,80],[16,88],[16,94],[16,103],[16,111],[16,119],[17,1],[17,8],[17,18],[17,28],[17,39],[17,50],[17,59],[17,67],[17,76],[17,87],[17,97],[17,105],[18,5],[18,16],[18,21],[18,28],[18,35],[18,46],[18,54],[18,62],[18,75],[18,84],[18,98],[19,1],[19,12],[19,26],[19,39],[19,52],[19,65],[19,77],[19,96],[20,13],[20,38],[20,52],[20,65],[20,77],[20,88],[20,99],[20,114],[20,126],[21,1],[21,11],[21,25],[21,36],[21,45],[21,58],[21,73],[21,82],[21,91],[21,102],[22,1],[22,6],[22,16],[22,24],[22,31],[22,39],[22,47],[22,56],[22,65],[22,73],[23,1],[23,18],[23,28],[23,43],[23,60],[23,75],[23,90],[23,105],[24,1],[24,11],[24,21],[24,28],[24,32],[24,37],[24,44],[24,54],[24,59],[24,62],[25,3],[25,12],[25,21],[25,33],[25,44],[25,56],[25,68],[26,1],[26,20],[26,40],[26,61],[26,84],[26,112],[26,137],[26,160],[26,184],[26,207],[27,1],[27,14],[27,23],[27,36],[27,45],[27,56],[27,64],[27,77],[27,89],[28,6],[28,14],[28,22],[28,29],[28,36],[28,44],[28,51],[28,60],[28,71],[28,78],[28,85],[29,7],[29,15],[29,24],[29,31],[29,39],[29,46],[29,53],[29,64],[30,6],[30,16],[30,25],[30,33],[30,42],[30,51],[31,1],[31,12],[31,20],[31,29],[32,1],[32,12],[32,21],[33,1],[33,7],[33,16],[33,23],[33,31],[33,36],[33,44],[33,51],[33,55],[33,63],[34,1],[34,8],[34,15],[34,23],[34,32],[34,40],[34,49],[35,4],[35,12],[35,19],[35,31],[35,39],[35,45],[36,13],[36,28],[36,41],[36,55],[36,71],[37,1],[37,25],[37,52],[37,77],[37,103],[37,127],[37,154],[38,1],[38,17],[38,27],[38,43],[38,62],[38,84],[39,6],[39,11],[39,22],[39,32],[39,41],[39,48],[39,57],[39,68],[39,75],[40,8],[40,17],[40,26],[40,34],[40,41],[40,50],[40,59],[40,67],[40,78],[41,1],[41,12],[41,21],[41,30],[41,39],[41,47],[42,1],[42,11],[42,16],[42,23],[42,32],[42,45],[42,52],[43,11],[43,23],[43,34],[43,48],[43,61],[43,74],[44,1],[44,19],[44,40],[45,1],[45,14],[45,23],[45,33],[46,6],[46,15],[46,21],[46,29],[47,1],[47,12],[47,20],[47,30],[48,1],[48,10],[48,16],[48,24],[48,29],[49,5],[49,12],[50,1],[50,16],[50,36],[51,7],[51,31],[51,52],[52,15],[52,32],[53,1],[53,27],[53,45],[54,7],[54,28],[54,50],[55,17],[55,41],[55,68],[56,17],[56,51],[56,77],[57,4],[57,12],[57,19],[57,25],[58,1],[58,7],[58,12],[58,22],[59,4],[59,10],[59,17],[60,1],[60,6],[60,12],[61,6],[62,1],[62,9],[63,5],[64,1],[64,10],[65,1],[65,6],[66,1],[66,8],[67,1],[67,13],[67,27],[68,16],[68,43],[69,9],[69,35],[70,11],[70,40],[71,11],[72,1],[72,14],[73,1],[73,20],[74,18],[74,48],[75,20],[76,6],[76,26],[77,20],[78,1],[78,31],[79,16],[80,1],[81,1],[82,1],[83,7],[83,35],[85,1],[86,1],[87,16],[89,1],[89,24],[91,1],[92,15],[95,1],[97,1],[98,8],[100,10],[103,1],[106,1],[109,1],[112,1]];
+const AYAHS = [7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+const SURAHS = [["Al-Fatihah","الفاتحة"],["Al-Baqarah","البقرة"],["Ali 'Imran","آل عمران"],["An-Nisa","النساء"],["Al-Ma'idah","المائدة"],["Al-An'am","الأنعام"],["Al-A'raf","الأعراف"],["Al-Anfal","الأنفال"],["At-Tawbah","التوبة"],["Yunus","يونس"],["Hud","هود"],["Yusuf","يوسف"],["Ar-Ra'd","الرعد"],["Ibrahim","إبراهيم"],["Al-Hijr","الحجر"],["An-Nahl","النحل"],["Al-Isra","الإسراء"],["Al-Kahf","الكهف"],["Maryam","مريم"],["Ta-Ha","طه"],["Al-Anbiya","الأنبياء"],["Al-Hajj","الحج"],["Al-Mu'minun","المؤمنون"],["An-Nur","النور"],["Al-Furqan","الفرقان"],["Ash-Shu'ara","الشعراء"],["An-Naml","النمل"],["Al-Qasas","القصص"],["Al-'Ankabut","العنكبوت"],["Ar-Rum","الروم"],["Luqman","لقمان"],["As-Sajdah","السجدة"],["Al-Ahzab","الأحزاب"],["Saba","سبأ"],["Fatir","فاطر"],["Ya-Sin","يس"],["As-Saffat","الصافات"],["Sad","ص"],["Az-Zumar","الزمر"],["Ghafir","غافر"],["Fussilat","فصلت"],["Ash-Shura","الشورى"],["Az-Zukhruf","الزخرف"],["Ad-Dukhan","الدخان"],["Al-Jathiyah","الجاثية"],["Al-Ahqaf","الأحقاف"],["Muhammad","محمد"],["Al-Fath","الفتح"],["Al-Hujurat","الحجرات"],["Qaf","ق"],["Adh-Dhariyat","الذاريات"],["At-Tur","الطور"],["An-Najm","النجم"],["Al-Qamar","القمر"],["Ar-Rahman","الرحمن"],["Al-Waqi'ah","الواقعة"],["Al-Hadid","الحديد"],["Al-Mujadila","المجادلة"],["Al-Hashr","الحشر"],["Al-Mumtahanah","الممتحنة"],["As-Saff","الصف"],["Al-Jumu'ah","الجمعة"],["Al-Munafiqun","المنافقون"],["At-Taghabun","التغابن"],["At-Talaq","الطلاق"],["At-Tahrim","التحريم"],["Al-Mulk","الملك"],["Al-Qalam","القلم"],["Al-Haqqah","الحاقة"],["Al-Ma'arij","المعارج"],["Nuh","نوح"],["Al-Jinn","الجن"],["Al-Muzzammil","المزمل"],["Al-Muddaththir","المدثر"],["Al-Qiyamah","القيامة"],["Al-Insan","الإنسان"],["Al-Mursalat","المرسلات"],["An-Naba","النبأ"],["An-Nazi'at","النازعات"],["'Abasa","عبس"],["At-Takwir","التكوير"],["Al-Infitar","الانفطار"],["Al-Mutaffifin","المطففين"],["Al-Inshiqaq","الانشقاق"],["Al-Buruj","البروج"],["At-Tariq","الطارق"],["Al-A'la","الأعلى"],["Al-Ghashiyah","الغاشية"],["Al-Fajr","الفجر"],["Al-Balad","البلد"],["Ash-Shams","الشمس"],["Al-Layl","الليل"],["Ad-Duha","الضحى"],["Ash-Sharh","الشرح"],["At-Tin","التين"],["Al-'Alaq","العلق"],["Al-Qadr","القدر"],["Al-Bayyinah","البينة"],["Az-Zalzalah","الزلزلة"],["Al-'Adiyat","العاديات"],["Al-Qari'ah","القارعة"],["At-Takathur","التكاثر"],["Al-'Asr","العصر"],["Al-Humazah","الهمزة"],["Al-Fil","الفيل"],["Quraysh","قريش"],["Al-Ma'un","الماعون"],["Al-Kawthar","الكوثر"],["Al-Kafirun","الكافرون"],["An-Nasr","النصر"],["Al-Masad","المسد"],["Al-Ikhlas","الإخلاص"],["Al-Falaq","الفلق"],["An-Nas","الناس"]];
+const SL = String.fromCharCode(47);
+const QURAN_URL = (s, a) => 'https:' + SL + SL + 'quran.ksu.edu.sa/index.php#aya=' + s + '_' + (a || 1) + '&m=hafs&qaree=husary&trans=ar_mu';
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad2 = n => String(n).padStart(2, '0');
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
+const thisMonth = () => today().slice(0, 7);
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const monthLabel = ym => `${MONTHS[+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
+const shiftMonth = (ym, d) => { let y = +ym.slice(0, 4), m = +ym.slice(5, 7) - 1 + d; y += Math.floor(m / 12); m = ((m % 12) + 12) % 12; return `${y}-${pad2(m + 1)}`; };
+const mStart = ym => ym + '-01';
+const mEnd = ym => ym + '-31';
+const dObj = s => new Date(s + 'T12:00:00');
+const fmtDate = (s, withDay) => { if (!s) return '—'; const d = dObj(s); return (withDay ? d.toLocaleDateString('en-GB', { weekday: 'short' }) + ', ' : '') + d.getDate() + ' ' + MONTHS[d.getMonth()].slice(0, 3); };
+const fmtDateY = s => s ? `${dObj(s).getDate()} ${MONTHS[dObj(s).getMonth()].slice(0, 3)} ${s.slice(0, 4)}` : '—';
+const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} };
+const num = v => v === '' || v == null ? null : Number(v);
+
+function surahName(s) { return s ? SURAHS[s - 1][0] : ''; }
+function juzOf(p) { return p < 22 ? 1 : Math.min(30, Math.floor((p - 2) / 20) + 1); }
+function cmpSA(a, b) { return a[0] - b[0] || a[1] - b[1]; }
+function pageOf(s, a) {
+  let lo = 0, hi = PAGES.length - 1, ans = 0;
+  while (lo <= hi) { const mid = (lo + hi) >> 1; if (cmpSA(PAGES[mid], [s, a]) <= 0) { ans = mid; lo = mid + 1; } else hi = mid - 1; }
+  return ans + 1;
+}
+function surahsOnPage(p) {
+  const start = PAGES[p - 1], next = PAGES[p] || [115, 1];
+  const out = [];
+  for (let s = start[0]; s <= Math.min(114, next[0]); s++) { if (s === next[0] && next[1] === 1) break; out.push(s); }
+  return out;
+}
+function stopRef(x) {
+  const p = num(x.page); if (!p) return null;
+  const s = num(x.surah) || PAGES[p - 1][0];
+  const a = num(x.ayah) || (num(x.surah) ? null : PAGES[p - 1][1]);
+  return { page: p, surah: s, ayah: a, juz: juzOf(p), exact: !!num(x.ayah) };
+}
+function refText(r) { return r ? `${surahName(r.surah)} ${r.surah}${r.ayah ? ':' + r.ayah : ''}` : ''; }
+
+const S = { mode: BOOT.mode, key: BOOT.key || null, url: BOOT.url || '', D: null, view: 'home', sid: null, tab: 'page', month: thisMonth(), tajEdit: null };
+
+function setData(d) {
+  if (S.mode === 'parent') {
+    const sid = d.student.id;
+    d.students = [Object.assign({ active: true }, d.student)];
+    d.sessions.forEach((x, i) => { x.studentId = sid; x.id = 'p' + i; });
+    d.tajweed.forEach((x, i) => { x.studentId = sid; x.id = 't' + i; x.updatedAt = x.updatedAt || ''; });
+    (d.months || []).forEach((x, i) => { x.studentId = sid; x.id = 'm' + i; });
+    S.sid = sid; S.view = 'student';
+  }
+  d.months = d.months || [];
+  d.topicList = [];
+  d.topics.forEach(g => g.topics.forEach((t, i) => d.topicList.push({ id: t[0], label: t[1], sub: t[2] || '', group: g.id, n: i + 1 })));
+  S.D = d;
+  if (S.mode === 'parent') { const ms = studentMonths(S.sid); if (ms.length && ms.indexOf(S.month) < 0) S.month = ms[ms.length - 1]; }
+}
+
+const isTeacher = () => S.mode === 'teacher';
+const students = () => S.D.students.slice().sort((a, b) => String(a.name).localeCompare(String(b.name)));
+const activeStudents = () => students().filter(s => s.active !== false && s.active !== 'FALSE');
+const student = id => S.D.students.find(s => s.id === id);
+const cmpSess = (a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : String(a.updatedAt || '') < String(b.updatedAt || '') ? -1 : 1;
+const sessOf = sid => S.D.sessions.filter(x => x.studentId === sid).sort(cmpSess);
+const sessIn = (sid, ym) => sessOf(sid).filter(x => x.date.slice(0, 7) === ym);
+function lastStop(sid, upto, excludeId) {
+  const l = sessOf(sid).filter(x => x.date <= upto && num(x.page) && x.id !== excludeId);
+  return l.length ? l[l.length - 1] : null;
+}
+function monthStats(sid, ym) {
+  const list = sessIn(sid, ym);
+  const c = { P: 0, A: 0, R: 0 };
+  list.forEach(x => { c[x.attendance === 'Present' ? 'P' : x.attendance === 'Absent' ? 'A' : 'R']++; });
+  const before = lastStop(sid, shiftMonth(ym, -1) + '-31');
+  const end = lastStop(sid, mEnd(ym));
+  const withPage = list.filter(x => num(x.page));
+  const first = withPage[0], last = withPage[withPage.length - 1];
+  const start = first ? (num(first.pageFrom) || (before ? num(before.page) : num(first.page))) : null;
+  const endPage = last ? num(last.page) : null;
+  const pages = start != null && endPage != null ? endPage - start : null;
+  const attended = c.P + c.R;
+  return { list, c, attended, pages, start, endPage, perSession: pages != null && withPage.length ? pages / withPage.length : null, end, before, owed: Math.max(0, c.A - c.R) };
+}
+function tajState(sid, upto) {
+  const logs = S.D.tajweed.filter(x => x.studentId === sid && x.date <= upto)
+    .sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : String(a.updatedAt) < String(b.updatedAt) ? -1 : 1);
+  const st = {};
+  logs.forEach(l => { st[l.topicId] = { status: l.status, remarks: l.remarks, date: l.date, prev: st[l.topicId] ? st[l.topicId].status : '' }; });
+  return st;
+}
+function tajChanges(sid, ym) {
+  const logs = S.D.tajweed.filter(x => x.studentId === sid && x.date <= mEnd(ym))
+    .sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : String(a.updatedAt) < String(b.updatedAt) ? -1 : 1);
+  const cur = {}, out = [];
+  logs.forEach(l => {
+    const from = cur[l.topicId] || '';
+    if (l.date.slice(0, 7) === ym && l.status !== from) out.push({ topicId: l.topicId, date: l.date, from, to: l.status });
+    cur[l.topicId] = l.status;
+  });
+  return out;
+}
+const statusIdx = s => s ? S.D.statuses.indexOf(s) + 1 : 0;
+function tajCounts(st) {
+  const c = [0, 0, 0, 0, 0];
+  S.D.topicList.forEach(t => c[statusIdx(st[t.id] && st[t.id].status)]++);
+  return c;
+}
+function topicLabel(id) { const t = S.D.topicList.find(x => x.id === id); return t ? (t.sub ? `${t.label} (${t.sub})` : t.label) : id; }
+function planOf(st) {
+  if (!st || !st.plan) return [];
+  if (Array.isArray(st.plan)) return st.plan;
+  try { const p = JSON.parse(st.plan); return Array.isArray(p) ? p : []; } catch (e) { return []; }
+}
+const monthsOf = sid => S.D.months.filter(m => m.studentId === sid);
+const monthRec = (sid, ym) => monthsOf(sid).find(m => m.month === ym) || null;
+const isDone = (sid, ym) => { const r = monthRec(sid, ym); return !!r && r.status === 'Completed'; };
+function studentMonths(sid) {
+  const set = new Set(monthsOf(sid).map(m => m.month));
+  sessOf(sid).forEach(x => set.add(x.date.slice(0, 7)));
+  S.D.tajweed.forEach(x => { if (x.studentId === sid) set.add(x.date.slice(0, 7)); });
+  return Array.from(set).sort();
+}
+function plannedFor(st, ym) {
+  const r = st ? monthRec(st.id, ym) : null;
+  if (r && num(r.classes)) return num(r.classes);
+  return planHistFor(st, ym);
+}
+function planHistFor(st, ym) {
+  const p = planOf(st);
+  if (!p.length) return S.D.settings.sessionsPerMonth;
+  let n = p[0].n;
+  p.forEach(e => { if (e.from <= ym) n = e.n; });
+  return n;
+}
+function latestMonth() {
+  let m = thisMonth();
+  S.D.months.forEach(x => { if (x.month > m) m = x.month; });
+  return m;
+}
+function earliestMonth() {
+  let m = thisMonth();
+  S.D.months.forEach(x => { if (x.month < m) m = x.month; });
+  S.D.sessions.forEach(x => { if (x.date.slice(0, 7) < m) m = x.date.slice(0, 7); });
+  S.D.tajweed.forEach(x => { if (x.date.slice(0, 7) < m) m = x.date.slice(0, 7); });
+  return m;
+}
+
+let busy = 0;
+function setBusy(d) { busy += d; let b = $('#busybar'); if (busy > 0 && !b) { b = document.createElement('div'); b.id = 'busybar'; b.className = 'busybar'; document.body.appendChild(b); } if (busy <= 0 && b) b.remove(); }
+async function call(fn, ...args) {
+  setBusy(1);
+  try {
+    const r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args }) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'Request failed.');
+    return j.result;
+  } catch (e) {
+    throw e instanceof Error ? e : new Error(String(e));
+  } finally { setBusy(-1); }
+}
+function toast(msg, bad) {
+  const t = document.createElement('div'); t.className = 'toast' + (bad ? ' bad' : ''); t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), bad ? 4200 : 2200);
+}
+const errMsg = e => String(e && e.message || e).replace(/^Error:\s*/, '').replace(/^Exception:\s*/, '');
+
+const STAR = (sz = 26, c = '#fff') => `<svg width="${sz}" height="${sz}" viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="${c}" stroke-width="1.8"><rect x="7" y="7" width="18" height="18" rx="1"/><rect x="7" y="7" width="18" height="18" rx="1" transform="rotate(45 16 16)"/></g><circle cx="16" cy="16" r="3.2" fill="#D9C07A"/></svg>`;
+
+function render() {
+  const app = $('#app');
+  if (S.mode === 'signin') { app.innerHTML = signinView(); const k = $('#keyin'); k && k.focus(); return; }
+  if (S.mode === 'error') { app.innerHTML = errorView(S.error); return; }
+  let body = '';
+  if (S.view === 'student' && student(S.sid)) body = studentView(S.sid);
+  else if (S.view === 'register') body = registerView();
+  else if (S.view === 'settings') body = settingsView();
+  else { S.view = 'home'; body = homeView(); }
+  app.innerHTML = header() + `<main><div class="wrap">${body}</div></main>`;
+  drawCharts();
+}
+function header() {
+  const nav = isTeacher() ? `<nav class="nav">
+      <button data-act="nav" data-v="home" class="${S.view === 'home' || S.view === 'student' ? 'on' : ''}">Students</button>
+      <button data-act="nav" data-v="register" class="${S.view === 'register' ? 'on' : ''}">Attendance</button>
+      <button data-act="nav" data-v="settings" class="${S.view === 'settings' ? 'on' : ''}">Settings</button></nav>
+      <button class="btn btn-gold btn-sm" data-act="log">+ Log session</button>` : '';
+  return `<header class="top"><div class="wrap"><div class="brand">${STAR()}<span>Recitation Tracker</span></div>${nav}</div></header><div class="goldrule"></div>`;
+}
+function monthBar() {
+  const first = earliestMonth();
+  return `<div class="monthbar"><button data-act="month" data-d="-1" ${S.month <= first ? 'disabled' : ''} aria-label="Previous month">‹</button><div class="m">${monthLabel(S.month)}</div><button data-act="month" data-d="1" ${S.month >= latestMonth() ? 'disabled' : ''} aria-label="Next month">›</button></div>`;
+}
+function signinView() {
+  return `<div class="center"><div class="card signin">${STAR(44, '#2F6B5E')}<h1>Recitation Tracker</h1>
+    <p class="muted small" style="margin:0 0 18px">Teacher sign-in. Parents: please use the link your teacher sent you.</p>
+    <form data-form="signin"><input id="keyin" class="i" name="key" placeholder="Teacher key" autocomplete="current-password" style="text-align:center">
+    <div class="err" id="signerr">${esc(S.error || '')}</div><button class="btn btn-primary" style="width:100%">Sign in</button></form></div></div>`;
+}
+function errorView(msg) {
+  return `<div class="center"><div class="card signin">${STAR(44, '#2F6B5E')}<h1>Link not available</h1><p class="muted">${esc(msg || 'Something went wrong.')}</p></div></div>`;
+}
+
+function homeView() {
+  const list = activeStudents();
+  let att = 0, abs = 0, owed = 0, pagesSum = 0, pagesN = 0, plannedTotal = 0;
+  const mix = {};
+  const cards = list.map(st => {
+    const planned = plannedFor(st, S.month);
+    plannedTotal += planned; mix[planned] = (mix[planned] || 0) + 1;
+    const m = monthStats(st.id, S.month);
+    att += m.attended; abs += m.c.A; owed += m.owed;
+    if (m.pages != null) { pagesSum += m.pages; pagesN++; }
+    const stop = stopRef(lastStop(st.id, mEnd(S.month)) || {});
+    const tj = tajCounts(tajState(st.id, mEnd(S.month)));
+    const total = S.D.topicList.length;
+    const slots = Math.max(planned, m.list.length);
+    const dots = Array.from({ length: slots }, (_, i) => { const x = m.list[i]; if (!x) return '<span class="dot" title="Not yet held"></span>'; const k = x.attendance[0]; return `<span class="dot ${k}" title="${esc(fmtDate(x.date))} · ${x.attendance}">${k === 'A' ? '×' : ''}</span>`; }).join('');
+    const lastS = sessOf(st.id).slice(-1)[0];
+    return `<div class="card scard" data-act="open-student" data-id="${esc(st.id)}" role="button" tabindex="0">
+      <div class="row"><div style="flex:1;min-width:0"><div class="nm">${esc(st.name)}</div><span class="badge plan" style="margin:3px 4px 2px 0">${planned} classes / month</span>${isDone(st.id, S.month) ? `<span class="badge done">✓ ${MONTHS[+S.month.slice(5) - 1].slice(0, 3)} completed</span>` : ''}<div class="small muted">${st.age !== '' && st.age != null ? esc(st.age) + ' yrs · ' : ''}Last session ${lastS ? fmtDate(lastS.date) : '—'}</div></div>
+        ${isTeacher() ? `<button class="btn btn-sm" data-act="log" data-id="${esc(st.id)}">+ Log</button>` : ''}</div>
+      <div class="stop">${stop ? `Last stop <b>p. ${stop.page}</b> · ${esc(refText(stop))} · Juz ${stop.juz}` : '<span class="muted">No page recorded yet</span>'}</div>
+      <div><div class="small muted" style="margin-bottom:5px">Attendance ${m.attended}/${planned}${m.start != null ? ` · p. ${m.start} → ${m.endPage} (${m.pages >= 0 ? '+' : ''}${m.pages})` : ''}</div><div class="dots">${dots}</div></div>
+      <div><div class="small muted" style="margin-bottom:5px">Tajweed · ${tj[4]} of ${total} mastered</div>${statusBar(tj)}</div>
+    </div>`;
+  }).join('');
+  const heldTotal = list.reduce((a, st) => a + sessIn(st.id, S.month).length, 0);
+  const rate = heldTotal ? Math.round(att / heldTotal * 100) : null;
+  return `<div class="pagehead"><div class="grow"><h1>Students</h1><div class="muted small">${list.length} active${Object.keys(mix).length ? ' · ' + Object.keys(mix).sort((a, b) => b - a).map(k => `${mix[k]} on ${k} classes/month`).join(' · ') : ''}</div></div>${monthBar()}</div>
+    <div class="tiles">
+      ${tile('Sessions attended', att, `of ${plannedTotal} planned`)}
+      ${tile('Attendance rate', rate == null ? '—' : rate + '%', heldTotal ? `${abs} absent` : 'No sessions yet')}
+      ${tile('Makeup owed', owed, 'absences not yet replaced')}
+      ${tile('Avg pages', pagesN ? (pagesSum / pagesN).toFixed(1) : '—', 'per student this month')}
+    </div>
+    ${list.length ? `<div class="grid cards">${cards}</div>` : `<div class="card empty">No students yet. ${isTeacher() ? '<br><br><button class="btn btn-primary" data-act="add-student">+ Add student</button>' : ''}</div>`}`;
+}
+const tile = (l, v, s) => `<div class="card tile"><div class="lbl">${l}</div><div class="val">${v}</div><div class="sub">${s || ''}</div></div>`;
+function statusBar(c) {
+  const total = c.reduce((a, b) => a + b, 0) || 1;
+  const segs = [4, 3, 2, 1].map(i => c[i] ? `<i style="width:${c[i] / total * 100}%;background:var(--st${i})" title="${S.D.statuses[i - 1]}: ${c[i]}"></i>` : '').join('');
+  return `<div class="sbar" role="img" aria-label="Mastered ${c[4]}, Fair ${c[3]}, Learning ${c[2]}, Not yet ${c[1]}, not assessed ${c[0]}">${segs}</div>`;
+}
+function statusLegend(c) {
+  return `<div class="legend">${[4, 3, 2, 1].map(i => `<span><i style="background:var(--st${i})"></i>${S.D.statuses[i - 1]} ${c ? '<b>' + c[i] + '</b>' : ''}</span>`).join('')}<span><i style="background:var(--st0)"></i>Not assessed ${c ? '<b>' + c[0] + '</b>' : ''}</span></div>`;
+}
+
+function studentView(sid) {
+  const st = student(sid);
+  const tabs = [['page', 'Page'], ['tajweed', 'Tajweed'], ['attendance', 'Attendance']];
+  const head = isTeacher()
+    ? `<button class="back" data-act="nav" data-v="home">‹ All students</button>`
+    : `<div class="small muted" style="margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Recitation progress report</div>`;
+  const actions = isTeacher() ? `<div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" data-act="log" data-id="${esc(sid)}">+ Log session</button>
+      <button class="btn" data-act="parent-link" data-id="${esc(sid)}">Parent link</button>
+      <button class="btn" data-act="edit-student" data-id="${esc(sid)}">Edit</button></div>` : '';
+  let body = '';
+  if (S.tab === 'tajweed') body = tajweedTab(sid);
+  else if (S.tab === 'attendance') body = attendanceTab(sid);
+  else body = pageTab(sid);
+  return `${head}<div class="pagehead"><div class="grow"><h1>${esc(st.name)}${st.age !== '' && st.age != null ? `<span class="muted" style="font-weight:500">, ${esc(st.age)}</span>` : ''}</h1>
+    ${st.active === false || st.active === 'FALSE' ? '<span class="badge off">Inactive</span>' : ''}</div>${actions}</div>
+    ${monthStrip(sid)}
+    ${monthCard(sid)}
+    <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" data-act="tab" data-v="${k}" class="${S.tab === k ? 'on' : ''}">${l}</button>`).join('')}</div>
+    ${body}
+    ${!isTeacher() ? `<div class="foot">Updated by the teacher after each session.</div>` : ''}`;
+}
+
+function monthStrip(sid) {
+  const ms = studentMonths(sid);
+  const list = ms.indexOf(S.month) < 0 ? ms.concat([S.month]).sort() : ms;
+  const chips = list.map(ym => {
+    const known = ms.indexOf(ym) >= 0;
+    return `<button class="mchip ${ym === S.month ? 'on' : ''} ${known ? '' : 'ghost'}" data-act="pick-month" data-v="${ym}">${MONTHS[+ym.slice(5) - 1].slice(0, 3)} ${ym.slice(0, 4)}${isDone(sid, ym) ? '<span class="ck">✓</span>' : ''}</button>`;
+  }).join('');
+  return `<div class="mstrip" role="tablist" aria-label="Months">${chips}${isTeacher() ? `<button class="mchip add" data-act="add-month" data-id="${esc(sid)}">+ Add month</button>` : ''}</div>`;
+}
+function monthCard(sid) {
+  const st = student(sid), ym = S.month, rec = monthRec(sid, ym), m = monthStats(sid, ym), planned = plannedFor(st, ym);
+  const status = rec ? rec.status : (m.list.length ? 'Open' : 'Not added');
+  const badge = status === 'Completed' ? '<span class="badge done">✓ Completed</span>' : status === 'Open' ? '<span class="badge plan">Open</span>' : '<span class="badge off">Not added yet</span>';
+  let btns = '';
+  if (isTeacher()) {
+    btns = rec || m.list.length
+      ? `<button class="btn btn-sm ${status === 'Completed' ? '' : 'btn-primary'}" data-act="toggle-month">${status === 'Completed' ? 'Reopen month' : '✓ Mark completed'}</button><button class="btn btn-sm" data-act="edit-month">Edit month</button>`
+      : `<button class="btn btn-sm btn-primary" data-act="add-month" data-id="${esc(sid)}" data-v="${ym}">+ Add ${monthLabel(ym)}</button>`;
+  }
+  const range = m.start != null ? `<span>Pages <b>${m.start} → ${m.endPage}</b> (${m.pages >= 0 ? '+' : ''}${m.pages})</span>` : '<span class="muted">No pages recorded</span>';
+  return `<div class="card monthcard"><div class="mh"><h2>${monthLabel(ym)}</h2>${badge}${btns}</div>
+    <div class="mfacts">${range}<span>Classes <b>${m.attended}/${planned}</b></span>${m.c.A ? `<span>Absent <b>${m.c.A}</b></span>` : ''}</div>
+    ${rec && rec.remarks ? `<div class="mremark"><b>Teacher's remark:</b> ${esc(rec.remarks)}</div>` : ''}</div>`;
+}
+
+function pageTab(sid) {
+  const m = monthStats(sid, S.month);
+  const stop = m.end ? stopRef(m.end) : null;
+  const withPage = m.list.filter(x => num(x.page)).length;
+  const tiles = `<div class="tiles">
+    ${tile('Start page', m.start != null ? 'p. ' + m.start : '—', m.start != null ? `${esc(refText(stopRef({ page: m.start })))} · Juz ${juzOf(m.start)}` : 'No sessions this month')}
+    ${tile('End page', m.endPage != null ? 'p. ' + m.endPage : '—', m.endPage != null && stop ? `${esc(refText(stop))} · Juz ${stop.juz}` : (stop ? `Last stop p. ${stop.page}` : 'Nothing recorded yet'))}
+    ${tile('Pages covered', m.pages == null ? '—' : (m.pages > 0 ? '+' : '') + m.pages, m.pages != null && m.pages < 0 ? 'Moved back (revision?)' : (m.perSession != null ? `${m.perSession.toFixed(1)} per session · ${withPage} session${withPage === 1 ? '' : 's'}` : ''))}
+    ${tile('Position in mushaf', stop ? Math.round(stop.page / 604 * 100) + '%' : '—', stop ? `page ${stop.page} of 604` : '')}
+  </div>`;
+  const rail = stop ? `<div class="card pad" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="font-size:16px">Mushaf position</h3>
+      <a class="btn btn-sm" target="_blank" rel="noopener" href="${QURAN_URL(stop.surah, stop.ayah)}">Open page ${stop.page} ↗</a></div>
+      <div class="rail"><div class="fill" style="width:${stop.page / 604 * 100}%"></div>${Array.from({ length: 29 }, (_, i) => `<span class="tick" style="left:${(22 + 20 * i) / 604 * 100}%"></span>`).join('')}</div>
+      <div class="railscale">${[[1, 1], [10, 182], [20, 382], [30, 582]].map(([j, p]) => `<span style="left:${(p - 1) / 604 * 100}%">Juz ${j}</span>`).join('')}</div></div>` : '';
+  const pts = sessOf(sid).filter(x => num(x.page));
+  const chart = pts.length >= 2 ? `<div class="card pad" style="margin-bottom:14px"><h3 style="font-size:16px">Page reached per session</h3><div class="small muted">All sessions · shaded band is ${monthLabel(S.month)}</div><div class="chart" data-chart="pages" data-sid="${esc(sid)}"></div></div>` : '';
+  return tiles + rail + chart + `<div class="section-title"><h2>Sessions in ${monthLabel(S.month)}</h2><span class="line"></span></div>` + sessionList(m.list);
+}
+function sessionList(list) {
+  if (!list.length) return `<div class="card empty">No sessions recorded this month.</div>`;
+  return `<div class="card list">${list.map(x => {
+    const r = stopRef(x);
+    return `<div class="li"><div class="d">${fmtDate(x.date)}<small>${dObj(x.date).toLocaleDateString('en-GB', { weekday: 'long' })}</small></div>
+      <div class="body"><span class="chip ${x.attendance}">${x.attendance}</span>
+        ${r ? `<span class="pgrange" style="margin-left:8px">${num(x.pageFrom) ? `p. ${x.pageFrom} → ${r.page}<span class="adv">${r.page - x.pageFrom >= 0 ? '+' : ''}${r.page - x.pageFrom}</span>` : `p. ${r.page}`}</span> <span class="muted small">· ${esc(refText(r))}${r.exact ? '' : ' (page start)'}</span>` : ''}
+        ${x.notes ? `<div class="notes">${esc(x.notes)}</div>` : ''}</div>
+      <div>${isTeacher() ? `<button class="btn btn-sm btn-ghost" data-act="edit-session" data-id="${esc(x.id)}">Edit</button>` : ''}</div></div>`;
+  }).join('')}</div>`;
+}
+
+function tajweedTab(sid) {
+  const upto = mEnd(S.month);
+  const st = tajState(sid, upto);
+  const counts = tajCounts(st);
+  const ed = S.tajEdit && S.tajEdit.sid === sid ? S.tajEdit : null;
+  const changes = tajChanges(sid, S.month);
+  const top = ed ? `<div class="editbar"><b>Editing assessment</b><label class="small" style="display:flex;align-items:center;gap:6px">Date <input type="date" class="i" style="min-height:34px;padding:4px 8px;width:auto" id="tajdate" value="${esc(ed.date)}" max="${today()}"></label>
+      <span class="grow"></span><button class="btn btn-sm" data-act="taj-cancel">Cancel</button><button class="btn btn-sm btn-primary" data-act="taj-save" id="tajsave">Save changes</button></div>`
+    : `<div class="card pad" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+        <h3 style="font-size:16px">${counts[4]} of ${S.D.topicList.length} topics mastered</h3>
+        ${isTeacher() ? `<button class="btn btn-sm btn-primary" data-act="taj-edit">Update assessment</button>` : ''}</div>
+        ${statusBar(counts)}<div style="margin-top:10px">${statusLegend(counts)}</div>
+        ${changes.length ? `<div style="margin-top:14px"><div class="small" style="font-weight:600;color:var(--ink-2)">Changes in ${monthLabel(S.month)}</div><ul class="changes" style="margin:6px 0 0;padding-left:18px">${changes.map(c => `<li><b>${esc(topicLabel(c.topicId))}</b>: ${esc(c.from || 'Not assessed')} → ${stChip(c.to)} <span class="muted small">${fmtDate(c.date)}</span></li>`).join('')}</ul></div>` : ''}
+      </div>`;
+  const groups = S.D.topics.map(g => {
+    let lastSub = '';
+    const rows = S.D.topicList.filter(t => t.group === g.id).map(t => {
+      let subH = '';
+      if (t.sub && t.sub !== lastSub) { subH = `<div class="tsub">${esc(t.sub)}</div>`; }
+      lastSub = t.sub;
+      const cur = st[t.id] || { status: '', remarks: '' };
+      if (ed) {
+        const d = ed.draft[t.id];
+        const changed = d.status !== (cur.status || '') || d.remarks !== (cur.remarks || '');
+        return subH + `<div class="trow edit ${changed ? 'changed' : ''}" data-row="${t.id}"><div class="tn"><span class="n">${t.n}</span>${esc(t.label)}</div>
+          <div class="seg">${S.D.statuses.map((s, i) => `<button type="button" data-act="taj-set" data-t="${t.id}" data-v="${esc(s)}" class="s${i + 1} ${d.status === s ? 'on' : ''}">${esc(s)}</button>`).join('')}</div>
+          <input class="i" data-rem="${t.id}" value="${esc(d.remarks)}" placeholder="Remarks" maxlength="1000"></div>`;
+      }
+      return subH + `<div class="trow"><div class="tn"><span class="n">${t.n}</span>${esc(t.label)}</div><div>${stChip(cur.status)}</div>
+        <div class="rem">${cur.remarks ? esc(cur.remarks) : '<span class="muted">—</span>'}${cur.date ? `<small>Updated ${fmtDateY(cur.date)}</small>` : ''}</div></div>`;
+    }).join('');
+    return `<div class="card tgroup"><div class="tgroup-h"><h3>${esc(g.name)}</h3><span class="small muted">${ed ? 'Status · Remarks' : 'Remarks'}</span></div>${rows}</div>`;
+  }).join('');
+  return top + groups;
+}
+const stChip = s => `<span class="st s${statusIdx(s)}">${esc(s || 'Not assessed')}</span>`;
+
+function attendanceTab(sid) {
+  const m = monthStats(sid, S.month);
+  const planned = plannedFor(student(sid), S.month);
+  const n = Math.max(planned, m.list.length);
+  const slots = Array.from({ length: n }, (_, i) => {
+    const x = m.list[i];
+    if (!x) return `<div class="slot emptyslot ${isTeacher() ? 'click' : ''}" ${isTeacher() ? `data-act="log" data-id="${esc(sid)}"` : ''}><div class="k">Session #${pad2(i + 1)}</div><div class="v muted">—</div><span class="small muted">${isTeacher() ? '+ Log' : 'Not yet'}</span></div>`;
+    return `<div class="slot ${isTeacher() ? 'click' : ''}" ${isTeacher() ? `data-act="edit-session" data-id="${esc(x.id)}"` : ''}><div class="k">Session #${pad2(i + 1)}</div><div class="v">${fmtDate(x.date, true)}</div><span class="chip ${x.attendance}">${x.attendance}</span></div>`;
+  }).join('');
+  const y = S.month.slice(0, 4);
+  const rows = Array.from({ length: 12 }, (_, i) => `${y}-${pad2(i + 1)}`).filter(ym => ym <= thisMonth() && ym >= earliestMonth()).map(ym => {
+    const s = monthStats(sid, ym);
+    return `<tr${ym === S.month ? ' style="background:var(--gold-soft)"' : ''}><td>${MONTHS[+ym.slice(5) - 1]}</td><td class="num">${s.c.P}</td><td class="num">${s.c.R}</td><td class="num">${s.c.A}</td><td class="num"><b>${s.attended}</b>/${plannedFor(student(sid), ym)}</td></tr>`;
+  }).join('');
+  return `<div class="tiles">
+      ${tile('Attended', `${m.attended}<span class="muted" style="font-size:18px">/${planned}</span>`, `present + replacement · plan ${planned} / month`)}
+      ${tile('Present', m.c.P, '')}
+      ${tile('Replacement', m.c.R, 'makeup classes')}
+      ${tile('Absent', m.c.A, m.owed ? `${m.owed} still to replace` : 'all replaced')}
+    </div>
+    <div class="slots">${slots}</div>
+    <div class="section-title"><h2>${y} summary</h2><span class="line"></span></div>
+    <div class="card scroll-x"><table class="t"><thead><tr><th>Month</th><th class="num">Present</th><th class="num">Replacement</th><th class="num">Absent</th><th class="num">Attended</th></tr></thead><tbody>${rows || '<tr><td colspan="5" class="muted">No data</td></tr>'}</tbody></table></div>`;
+}
+
+function registerView() {
+  const list = activeStudents();
+  const dates = Array.from(new Set(S.D.sessions.filter(x => x.date.slice(0, 7) === S.month).map(x => x.date))).sort();
+  const head = `<tr><th>Student</th>${dates.map(d => `<th>${dObj(d).getDate()}<br><span class="muted" style="font-weight:500;text-transform:none">${dObj(d).toLocaleDateString('en-GB', { weekday: 'short' })}</span></th>`).join('')}<th class="num">Attended</th><th class="num">Owed</th></tr>`;
+  const body = list.map(st => {
+    const m = monthStats(st.id, S.month);
+    const cells = dates.map(d => {
+      const x = m.list.filter(s => s.date === d).slice(-1)[0];
+      return `<td>${x ? `<button class="cellbtn ${x.attendance[0]}" data-act="edit-session" data-id="${esc(x.id)}" title="${esc(x.attendance)}${x.page ? ' · p. ' + x.page : ''}">${x.attendance[0]}</button>` : `<button class="cellbtn" data-act="log" data-id="${esc(st.id)}" data-date="${d}" title="Log for ${fmtDate(d)}">+</button>`}</td>`;
+    }).join('');
+    return `<tr><td><a href="#" data-act="open-student" data-id="${esc(st.id)}" style="font-weight:600;text-decoration:none">${esc(st.name)}</a></td>${cells}<td class="num"><b>${m.attended}</b>/${plannedFor(st, S.month)}</td><td class="num">${m.owed || '—'}</td></tr>`;
+  }).join('');
+  return `<div class="pagehead"><div class="grow"><h1>Attendance register</h1><div class="muted small">P = Present · R = Replacement · A = Absent. Tap a cell to edit.</div></div>${monthBar()}</div>
+    <div class="card scroll-x">${list.length ? `<table class="t reg"><thead>${head}</thead><tbody>${body}</tbody></table>${dates.length ? '' : '<div class="empty">No sessions logged in this month yet.</div>'}` : '<div class="empty">No students yet.</div>'}</div>`;
+}
+
+function settingsView() {
+  const all = students();
+  return `<div class="pagehead"><div class="grow"><h1>Settings</h1></div></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+      <div class="card pad"><h3 style="font-size:17px;margin-bottom:12px">General</h3>
+        <form data-form="settings">
+          <label class="f"><span>Default classes per month (new students)</span><input class="i" type="number" name="spm" min="1" max="31" value="${S.D.settings.sessionsPerMonth}"></label>
+          <label class="f"><span>Parent links are built from this site's address</span><input class="i" name="url" value="${esc(S.url)}" readonly></label>
+          <div class="err" id="seterr"></div>
+          <button class="btn btn-primary">Save settings</button>
+        </form></div>
+      <div class="card pad"><h3 style="font-size:17px;margin-bottom:6px">This device</h3>
+        <p class="small muted" style="margin-top:0">Your teacher key is remembered on this browser so you don't need to re-enter it.</p>
+        <button class="btn" data-act="refresh">Reload data</button> <button class="btn btn-danger" data-act="signout">Sign out</button></div>
+    </div>
+    <div class="section-title"><h2>Students</h2><span class="line"></span><button class="btn btn-sm btn-primary" data-act="add-student">+ Add student</button></div>
+    <div class="card scroll-x"><table class="t"><thead><tr><th>Name</th><th>Age</th><th>Classes / month</th><th>Status</th><th></th></tr></thead><tbody>
+      ${all.map(s => `<tr><td style="font-weight:600">${esc(s.name)}</td><td>${esc(s.age)}</td><td>${plannedFor(s, thisMonth())}</td><td>${s.active === false || s.active === 'FALSE' ? '<span class="badge off">Inactive</span>' : '<span class="badge">Active</span>'}</td>
+        <td style="text-align:right;white-space:nowrap"><button class="btn btn-sm" data-act="parent-link" data-id="${esc(s.id)}">Parent link</button> <button class="btn btn-sm" data-act="edit-student" data-id="${esc(s.id)}">Edit</button></td></tr>`).join('') || '<tr><td colspan="5" class="muted">No students yet.</td></tr>'}
+    </tbody></table></div>`;
+}
+
+function openModal(title, body, foot, form) {
+  $('#modal').innerHTML = `<div class="modal" data-act="modal-bg"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+    ${form ? `<form data-form="${form}" novalidate>` : ''}<div class="sheet-h"><h2>${esc(title)}</h2><button type="button" class="btn btn-ghost iconbtn" data-act="close" aria-label="Close">✕</button></div>
+    <div class="sheet-b">${body}</div><div class="sheet-f">${foot}</div>${form ? '</form>' : ''}</div></div>`;
+  const f = $('#modal input:not([type=hidden]):not([type=radio]), #modal select'); if (f && window.innerWidth > 640) f.focus();
+}
+function closeModal() { $('#modal').innerHTML = ''; }
+
+function sessionModal(sess, presetSid, presetDate) {
+  const list = activeStudents();
+  if (!list.length) { toast('Add a student first.', true); return; }
+  const sid = sess ? sess.studentId : (presetSid || (S.view === 'student' ? S.sid : list[0].id));
+  const date = sess ? sess.date : (presetDate || today());
+  const att = sess ? sess.attendance : 'Present';
+  const prev = lastStop(sid, date, sess && sess.id);
+  const page = sess ? sess.page : (prev ? prev.page : '');
+  const pageFrom = sess ? (sess.pageFrom || '') : (prev ? prev.page : '');
+  const surah = sess ? (sess.surah || (num(sess.page) ? PAGES[sess.page - 1][0] : '')) : (prev ? (prev.surah || PAGES[prev.page - 1][0]) : '');
+  const ayah = sess ? sess.ayah : (prev ? prev.ayah : '');
+  const opts = (sess && !list.find(s => s.id === sid) ? [student(sid)] : []).concat(list);
+  const body = `<input type="hidden" name="id" value="${esc(sess ? sess.id : '')}">
+    <div class="frow"><label class="f"><span>Student</span><select class="i" name="studentId">${opts.map(s => `<option value="${esc(s.id)}" ${s.id === sid ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></label>
+    <label class="f"><span>Date</span><input class="i" type="date" name="date" value="${esc(date)}" max="${today()}" required></label></div>
+    <div class="f" style="margin-bottom:14px" role="radiogroup" aria-label="Attendance"><span>Attendance</span><div class="radios">${S.D.attendance.map(a => `<label><input type="radio" name="attendance" value="${a}" ${a === att ? 'checked' : ''}><span class="${a}">${a}</span></label>`).join('')}</div></div>
+    <div id="progf" class="${att === 'Absent' ? 'hidden' : ''}">
+      <div class="frow" style="grid-template-columns:minmax(90px,.7fr) 1.3fr"><label class="f"><span>From page</span><input class="i" type="number" inputmode="numeric" name="pageFrom" min="1" max="604" value="${esc(pageFrom)}" style="text-align:center;font-weight:600;font-size:17px"></label>
+      <label class="f"><span>To page (1–604)</span><div class="stepper"><button type="button" class="btn iconbtn" data-act="pg" data-d="-1" aria-label="Previous page">−</button><input class="i" type="number" inputmode="numeric" name="page" min="1" max="604" value="${esc(page)}"><button type="button" class="btn iconbtn" data-act="pg" data-d="1" aria-label="Next page">+</button></div></label></div>
+      <div class="frow"><label class="f"><span>Surah</span><select class="i" name="surah"><option value="">—</option>${SURAHS.map((s, i) => `<option value="${i + 1}" ${+surah === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(s[0])}</option>`).join('')}</select></label>
+      <label class="f"><span>Ayat (optional)</span><input class="i" type="number" inputmode="numeric" name="ayah" min="1" value="${esc(ayah)}" placeholder="e.g. 120"></label></div>
+      <div id="pghint" class="hint"></div>
+    </div>
+    <label class="f"><span>Notes (optional)</span><textarea class="i" name="notes" maxlength="1000" placeholder="e.g. Revise mad lazim; smooth flow today">${esc(sess ? sess.notes : '')}</textarea></label>
+    <div class="err" id="sesserr"></div>`;
+  const foot = `${sess ? '<button type="button" class="btn btn-danger left" data-act="del-session">Delete</button>' : ''}<button type="button" class="btn" data-act="close">Cancel</button><button class="btn btn-primary" id="sesssave">Save</button>`;
+  openModal(sess ? 'Edit session' : 'Log session', body, foot, 'session');
+  const f = $('form[data-form=session]');
+  f.dataset.pageTouched = sess ? '1' : '';
+  updatePageHint();
+}
+function updatePageHint() {
+  const f = $('form[data-form=session]'); if (!f) return;
+  const att = (f.querySelector('input[name=attendance]:checked') || {}).value;
+  $('#progf').classList.toggle('hidden', att === 'Absent');
+  const p = num(f.page.value), s = num(f.surah.value), a = num(f.ayah.value);
+  const h = $('#pghint');
+  if (s) f.ayah.max = AYAHS[s - 1];
+  if (!p || p < 1 || p > 604) { h.className = 'hint'; h.innerHTML = 'Enter the mushaf page (Madani, 604 pages).'; return; }
+  const st = PAGES[p - 1], pf = num(f.pageFrom.value);
+  const adv = pf >= 1 && pf <= 604 ? `<b>${p - pf >= 0 ? '+' : ''}${p - pf} page${Math.abs(p - pf) === 1 ? '' : 's'}</b> this session${p < pf ? ' (going back: revision?)' : ''} · ` : '';
+  let html = adv + `Page ${p} starts at <b>${esc(surahName(st[0]))} ${st[0]}:${st[1]}</b> · Juz ${juzOf(p)} · <a target="_blank" rel="noopener" href="${QURAN_URL(s || st[0], a || (s ? 1 : st[1]))}">Open ↗</a>`;
+  let warn = false;
+  if (s && a) {
+    if (a > AYAHS[s - 1]) { html = `${esc(surahName(s))} has only ${AYAHS[s - 1]} ayat.`; warn = true; }
+    else { const q = pageOf(s, a); if (q !== p) { html = `${esc(surahName(s))} ${s}:${a} is on <b>page ${q}</b>, not ${p}. <button type="button" class="btn btn-sm" data-act="use-page" data-v="${q}">Use page ${q}</button>`; warn = true; } }
+  } else if (s && surahsOnPage(p).indexOf(s) < 0) {
+    html = `${esc(surahName(s))} is not on page ${p}. <button type="button" class="btn btn-sm" data-act="use-page" data-v="${pageOf(s, 1)}">Go to its first page (${pageOf(s, 1)})</button>`; warn = true;
+  }
+  h.className = 'hint' + (warn ? ' warn' : ''); h.innerHTML = html;
+}
+function onPageChanged() {
+  const f = $('form[data-form=session]'); const p = num(f.page.value);
+  f.dataset.pageTouched = '1';
+  if (p >= 1 && p <= 604) {
+    const s = num(f.surah.value), a = num(f.ayah.value);
+    const onPage = s && (a ? pageOf(s, a) === p : surahsOnPage(p).indexOf(s) >= 0);
+    if (!onPage) { f.surah.value = PAGES[p - 1][0]; f.ayah.value = ''; }
+  }
+  updatePageHint();
+}
+
+function studentModal(st) {
+  const body = `<input type="hidden" name="id" value="${esc(st ? st.id : '')}">
+    <label class="f"><span>Full name</span><input class="i" name="name" value="${esc(st ? st.name : '')}" maxlength="120" required placeholder="e.g. Muhammad Siddiq bin Khairil Mubin"></label>
+    <div class="frow"><label class="f"><span>Age</span><input class="i" type="number" name="age" min="3" max="99" value="${esc(st ? st.age : '')}"></label>
+    <label class="f"><span>Status</span><select class="i" name="active"><option value="1">Active</option><option value="0" ${st && (st.active === false || st.active === 'FALSE') ? 'selected' : ''}>Inactive (hidden, link disabled)</option></select></label></div>
+    ${planField(st)}
+    <label class="f"><span>Teacher notes (not shown to parents)</span><textarea class="i" name="notes" maxlength="500">${esc(st ? st.notes : '')}</textarea></label>
+    <div class="err" id="sterr"></div>`;
+  openModal(st ? 'Edit student' : 'Add student', body, `<button type="button" class="btn" data-act="close">Cancel</button><button class="btn btn-primary">Save</button>`, 'student');
+}
+
+function classesField(cur, label, extra) {
+  const mode = cur === 4 || cur === 8 ? String(cur) : 'custom';
+  const opt = (v, l) => `<label><input type="radio" name="cpmMode" value="${v}" ${mode === v ? 'checked' : ''}><span class="opt">${l}</span></label>`;
+  return `<div class="f" role="radiogroup" aria-label="${esc(label)}"><span>${esc(label)}</span><div class="radios">${opt('4', '4 classes')}${opt('8', '8 classes')}${opt('custom', 'Custom')}</div></div>
+    <div class="frow" id="cpmrow">
+      <label class="f ${mode === 'custom' ? '' : 'hidden'}" id="cpmcustom"><span>Number of classes</span><input class="i" type="number" name="cpm" min="1" max="31" value="${cur}"></label>
+      ${extra || ''}
+    </div>`;
+}
+function classesFromForm(f) {
+  const mode = (f.querySelector('input[name=cpmMode]:checked') || {}).value;
+  const n = mode === 'custom' ? Number(f.cpm.value) : Number(mode);
+  return n >= 1 && n <= 31 && n % 1 === 0 ? n : null;
+}
+function planField(st) {
+  const cur = st ? planHistFor(st, thisMonth()) : S.D.settings.sessionsPerMonth;
+  return classesField(cur, st ? 'Default classes per month' : 'Classes per month', st ? `<label class="f"><span>Effective from</span><input class="i" type="month" name="eff" value="${thisMonth()}"></label>` : '') +
+    (st ? `<div class="hint" style="margin-top:-4px">Used for months you haven't added yet. Months already added keep their own number (change it with <b>Edit month</b>).</div>` : '');
+}
+function nextMonthFor(sid) {
+  const ms = monthsOf(sid).map(m => m.month).concat(sessOf(sid).map(x => x.date.slice(0, 7))).sort();
+  return ms.length ? shiftMonth(ms[ms.length - 1], 1) : thisMonth();
+}
+function monthModal(sid, ym, editing) {
+  const st = student(sid), rec = editing ? monthRec(sid, ym) : null;
+  const month = ym || nextMonthFor(sid);
+  const cur = rec && num(rec.classes) ? num(rec.classes) : plannedFor(st, month);
+  const status = rec ? rec.status : (editing ? 'Open' : 'Open');
+  const body = `<input type="hidden" name="studentId" value="${esc(sid)}">
+    <label class="f"><span>Month</span><input class="i" type="month" name="month" value="${month}" ${editing ? 'readonly' : ''} required></label>
+    ${classesField(cur, 'Classes this month')}
+    ${editing ? `<div class="f" role="radiogroup" aria-label="Status"><span>Status</span><div class="radios">${S.D.monthStatuses.map(v => `<label><input type="radio" name="mstatus" value="${v}" ${v === status ? 'checked' : ''}><span class="opt">${v === 'Completed' ? '✓ Completed' : v}</span></label>`).join('')}</div></div>` : ''}
+    <label class="f"><span>Teacher's remark for the month (shown to parents)</span><textarea class="i" name="remarks" maxlength="1000" placeholder="e.g. Good progress; focus on mad lazim next month">${esc(rec ? rec.remarks : '')}</textarea></label>
+    <div class="err" id="mnerr"></div>`;
+  const foot = `${rec ? '<button type="button" class="btn btn-danger left" data-act="del-month">Remove month</button>' : ''}<button type="button" class="btn" data-act="close">Cancel</button><button class="btn btn-primary">${editing ? 'Save' : 'Add month'}</button>`;
+  openModal(editing ? `Edit ${monthLabel(month)}` : `Add month · ${st.name}`, body, foot, 'month');
+}
+function planFromForm(f, st) {
+  const n = classesFromForm(f);
+  if (n == null) return { error: 'Classes per month must be a whole number from 1 to 31.' };
+  if (!st) return { plan: [{ from: '2000-01', n }] };
+  const eff = f.eff && /^\d{4}-\d{2}$/.test(f.eff.value) ? f.eff.value : thisMonth();
+  if (planHistFor(st, eff) === n) return { plan: null };
+  const base = planOf(st).length ? planOf(st) : [{ from: '2000-01', n: S.D.settings.sessionsPerMonth }];
+  return { plan: base.filter(e => e.from < eff).concat([{ from: eff, n }]) };
+}
+
+function parentLinkModal(sid) {
+  const st = student(sid);
+  if (!S.url) {
+    openModal('Parent link', `<p>The web app URL isn't set yet, so links can't be built.</p><p class="small muted">Copy it from <b>Deploy → Manage deployments</b> in Apps Script (ends with <code>/exec</code>) and paste it in Settings.</p>`,
+      `<button type="button" class="btn" data-act="close">Close</button><button type="button" class="btn btn-primary" data-act="nav" data-v="settings">Open settings</button>`);
+    return;
+  }
+  const link = `${S.url}?s=${st.token}`;
+  const wa = `https:${SL}${SL}wa.me/?text=${encodeURIComponent(`Assalamualaikum. This is ${st.name}'s Quran recitation progress page (page, tajweed and attendance). It updates after every session:\n${link}`)}`;
+  openModal('Parent link', `<p class="small muted" style="margin-top:0">Read-only view of <b>${esc(st.name)}</b> only. Anyone with this link can see it — send it only to the parent.</p>
+    <div class="linkbox"><input class="i" id="plink" readonly value="${esc(link)}"><button type="button" class="btn" data-act="copy">Copy</button></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px"><a class="btn btn-primary" target="_blank" rel="noopener" href="${esc(wa)}">Share on WhatsApp</a><a class="btn" target="_blank" rel="noopener" href="${esc(link)}">Preview</a></div>
+    <p class="small muted">If the link is forwarded to the wrong person, reset it. The old link stops working immediately.</p>`,
+    `<button type="button" class="btn btn-danger left" data-act="reset-token" data-id="${esc(sid)}">Reset link</button><button type="button" class="btn" data-act="close">Done</button>`);
+}
+
+function drawCharts() {
+  $$('[data-chart=pages]').forEach(el => {
+    const pts = sessOf(el.dataset.sid).filter(x => num(x.page)).map(x => ({ d: x.date, p: +x.page, x }));
+    const W = Math.max(280, el.clientWidth), H = 200, L = 40, R = 12, T = 12, B = 26;
+    const t0 = dObj(pts[0].d).getTime(), t1 = Math.max(dObj(pts[pts.length - 1].d).getTime(), t0 + 864e5);
+    let lo = Math.min(...pts.map(q => q.p)), hi = Math.max(...pts.map(q => q.p));
+    const padv = Math.max(2, Math.round((hi - lo) * 0.1)); lo = Math.max(1, lo - padv); hi = Math.min(604, hi + padv); if (hi === lo) hi = lo + 1;
+    const X = t => L + (t - t0) / (t1 - t0) * (W - L - R), Y = p => T + (1 - (p - lo) / (hi - lo)) * (H - T - B);
+    const ms = Math.max(t0, dObj(mStart(S.month)).getTime() - 432e5), me = Math.min(t1, dObj(mEnd(S.month).replace(/-31$/, '-' + new Date(+S.month.slice(0, 4), +S.month.slice(5, 7), 0).getDate())).getTime() + 432e5);
+    const band = me > ms ? `<rect x="${X(ms)}" y="${T}" width="${X(me) - X(ms)}" height="${H - T - B}" fill="var(--gold-soft)"/>` : '';
+    const ticks = 4, yt = Array.from({ length: ticks + 1 }, (_, i) => Math.round(lo + (hi - lo) * i / ticks));
+    const grid = Array.from(new Set(yt)).map(v => `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="var(--ink-3)">${v}</text>`).join('');
+    const xl = [pts[0], pts[pts.length - 1]].map((q, i) => `<text x="${X(dObj(q.d).getTime())}" y="${H - 6}" text-anchor="${i ? 'end' : 'start'}" font-size="11" fill="var(--ink-3)">${fmtDateY(q.d)}</text>`).join('');
+    const path = pts.map((q, i) => `${i ? 'L' : 'M'}${X(dObj(q.d).getTime()).toFixed(1)},${Y(q.p).toFixed(1)}`).join('');
+    const dots = pts.map(q => `<circle cx="${X(dObj(q.d).getTime())}" cy="${Y(q.p)}" r="4" fill="var(--teal)" stroke="var(--surface)" stroke-width="2"/>`).join('');
+    el.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Page reached per session">${band}${grid}${xl}<path d="${path}" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linejoin="round"/>${dots}<line class="xh" y1="${T}" y2="${H - B}" stroke="var(--ink-3)" stroke-dasharray="3 3" opacity="0"/></svg><div class="tip"></div>`;
+    const svg = el.querySelector('svg'), tip = el.querySelector('.tip'), xh = el.querySelector('.xh');
+    const move = ev => {
+      const r = svg.getBoundingClientRect(), mx = ev.clientX - r.left;
+      let best = pts[0], bd = 1e9; pts.forEach(q => { const dx = Math.abs(X(dObj(q.d).getTime()) - mx); if (dx < bd) { bd = dx; best = q; } });
+      const cx = X(dObj(best.d).getTime()), cy = Y(best.p), ref = stopRef(best.x);
+      xh.setAttribute('x1', cx); xh.setAttribute('x2', cx); xh.setAttribute('opacity', '.6');
+      tip.innerHTML = `<b>${fmtDateY(best.d)}</b> · p. ${best.p}<br>${esc(refText(ref))}`; tip.style.left = cx + 'px'; tip.style.top = cy + 'px'; tip.style.opacity = 1;
+    };
+    svg.addEventListener('pointermove', move); svg.addEventListener('pointerdown', move);
+    svg.addEventListener('pointerleave', () => { tip.style.opacity = 0; xh.setAttribute('opacity', '0'); });
+  });
+}
+let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(drawCharts, 150); });
+
+const ACT = {
+  nav(el) { closeModal(); S.view = el.dataset.v; S.tajEdit = null; render(); window.scrollTo(0, 0); },
+  month(el) { S.month = shiftMonth(S.month, +el.dataset.d); S.tajEdit = null; render(); },
+  tab(el) { S.tab = el.dataset.v; S.tajEdit = null; render(); },
+  'open-student'(el, ev) { ev.preventDefault(); S.sid = el.dataset.id; S.view = 'student'; S.tajEdit = null; render(); window.scrollTo(0, 0); },
+  log(el, ev) { ev.stopPropagation(); sessionModal(null, el.dataset.id, el.dataset.date); },
+  'edit-session'(el, ev) { ev.stopPropagation(); const x = S.D.sessions.find(s => s.id === el.dataset.id); if (x) sessionModal(x); },
+  close() { closeModal(); },
+  'modal-bg'(el, ev) { if (ev.target === el) closeModal(); },
+  pg(el) { const f = el.form; const p = (num(f.page.value) || 0) + +el.dataset.d; if (p >= 1 && p <= 604) { f.page.value = p; onPageChanged(); } },
+  'use-page'(el) { const f = $('form[data-form=session]'); f.page.value = el.dataset.v; f.dataset.pageTouched = '1'; updatePageHint(); },
+  async 'del-session'(el) {
+    if (!el.dataset.armed) { el.dataset.armed = 1; el.textContent = 'Tap again to delete'; return; }
+    const id = $('form[data-form=session]').id.value;
+    try { await call('api_deleteSession', S.key, id); S.D.sessions = S.D.sessions.filter(x => x.id !== id); closeModal(); render(); toast('Session deleted'); }
+    catch (e) { $('#sesserr').textContent = errMsg(e); }
+  },
+  'parent-link'(el) { parentLinkModal(el.dataset.id); },
+  'pick-month'(el) { S.month = el.dataset.v; S.tajEdit = null; render(); },
+  'add-month'(el) { monthModal(el.dataset.id || S.sid, el.dataset.v || null, false); },
+  'edit-month'() { monthModal(S.sid, S.month, true); },
+  async 'toggle-month'(el) {
+    const rec = monthRec(S.sid, S.month), st = student(S.sid);
+    const m = { studentId: S.sid, month: S.month, status: rec && rec.status === 'Completed' ? 'Open' : 'Completed', classes: rec ? rec.classes : plannedFor(st, S.month), remarks: rec ? rec.remarks : '' };
+    el.disabled = true;
+    try { saveMonthLocal(await call('api_saveMonth', S.key, m)); render(); toast(m.status === 'Completed' ? `${monthLabel(S.month)} marked completed` : `${monthLabel(S.month)} reopened`); }
+    catch (e) { el.disabled = false; toast(errMsg(e), true); }
+  },
+  async 'del-month'(el) {
+    if (!el.dataset.armed) { el.dataset.armed = 1; el.textContent = 'Tap again to remove'; return; }
+    const rec = monthRec(S.sid, S.month);
+    try { await call('api_deleteMonth', S.key, rec.id); S.D.months = S.D.months.filter(x => x.id !== rec.id); closeModal(); render(); toast('Month removed. Sessions were kept.'); }
+    catch (e) { $('#mnerr').textContent = errMsg(e); }
+  },
+  copy() {
+    const i = $('#plink'); i.select(); i.setSelectionRange(0, 9999);
+    const ok = () => toast('Link copied');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(i.value).then(ok, () => { document.execCommand('copy') ? ok() : toast('Select the link and copy it manually', true); });
+    else { document.execCommand('copy') ? ok() : toast('Select the link and copy it manually', true); }
+  },
+  async 'reset-token'(el) {
+    if (!el.dataset.armed) { el.dataset.armed = 1; el.textContent = 'Tap again to reset'; return; }
+    try { const st = await call('api_resetToken', S.key, el.dataset.id); Object.assign(student(st.id), st); parentLinkModal(st.id); toast('New link created. The old one no longer works.'); }
+    catch (e) { toast(errMsg(e), true); }
+  },
+  'add-student'() { studentModal(null); },
+  'edit-student'(el) { studentModal(student(el.dataset.id)); },
+  'taj-edit'() {
+    const st = tajState(S.sid, today());
+    const draft = {}; S.D.topicList.forEach(t => { draft[t.id] = { status: (st[t.id] && st[t.id].status) || '', remarks: (st[t.id] && st[t.id].remarks) || '' }; });
+    S.tajEdit = { sid: S.sid, date: today(), draft, base: st };
+    if (S.month !== thisMonth()) S.month = thisMonth();
+    render();
+  },
+  'taj-cancel'() { S.tajEdit = null; render(); },
+  'taj-set'(el) {
+    const d = S.tajEdit.draft[el.dataset.t]; d.status = d.status === el.dataset.v ? '' : el.dataset.v;
+    $$(`[data-act=taj-set][data-t="${el.dataset.t}"]`).forEach(b => b.classList.toggle('on', b.dataset.v === d.status));
+    markTajRow(el.dataset.t);
+  },
+  async 'taj-save'(el) {
+    const ed = S.tajEdit; ed.date = $('#tajdate').value || today();
+    const base = tajState(ed.sid, ed.date);
+    const changes = S.D.topicList.filter(t => { const d = ed.draft[t.id], b = base[t.id] || {}; return d.status !== (b.status || '') || d.remarks !== (b.remarks || ''); })
+      .map(t => ({ topicId: t.id, status: ed.draft[t.id].status, remarks: ed.draft[t.id].remarks }));
+    if (!changes.length) { S.tajEdit = null; render(); toast('No changes'); return; }
+    el.disabled = true;
+    try {
+      const saved = await call('api_saveTajweed', S.key, ed.sid, ed.date, changes);
+      saved.forEach(r => { const i = S.D.tajweed.findIndex(x => x.id === r.id); if (i >= 0) S.D.tajweed[i] = r; else S.D.tajweed.push(r); });
+      S.tajEdit = null; S.month = ed.date.slice(0, 7); render(); toast(`Saved ${saved.length} topic${saved.length === 1 ? '' : 's'}`);
+    } catch (e) { el.disabled = false; toast(errMsg(e), true); }
+  },
+  async refresh() { try { setData(await call('api_bootstrap', S.key)); render(); toast('Data reloaded'); } catch (e) { toast(errMsg(e), true); } },
+  signout() { lsSet('rt_key', null); S.mode = 'signin'; S.key = null; S.error = ''; render(); }
+};
+function saveMonthLocal(r) {
+  const i = S.D.months.findIndex(x => x.id === r.id);
+  if (i >= 0) S.D.months[i] = r; else S.D.months.push(r);
+}
+function markTajRow(id) {
+  const ed = S.tajEdit, d = ed.draft[id], b = ed.base[id] || {};
+  const row = $(`[data-row="${id}"]`); if (row) row.classList.toggle('changed', d.status !== (b.status || '') || d.remarks !== (b.remarks || ''));
+}
+
+document.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-act]');
+  if (!el || el.disabled) return;
+  const fn = ACT[el.dataset.act]; if (fn) fn(el, ev);
+});
+document.addEventListener('keydown', ev => {
+  if (ev.key === 'Escape' && $('#modal').innerHTML) closeModal();
+  if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.matches('.scard')) { ev.preventDefault(); ev.target.click(); }
+});
+document.addEventListener('input', ev => {
+  const t = ev.target;
+  if (t.dataset.rem && S.tajEdit) { S.tajEdit.draft[t.dataset.rem].remarks = t.value; markTajRow(t.dataset.rem); return; }
+  if (t.form && t.form.dataset.form === 'session') {
+    if (t.name === 'page') onPageChanged();
+    else if (t.name === 'surah' || t.name === 'ayah' || t.name === 'attendance' || t.name === 'pageFrom') updatePageHint();
+  }
+});
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (t.name === 'cpmMode') { const c = $('#cpmcustom'); if (c) c.classList.toggle('hidden', t.value !== 'custom'); if (t.value !== 'custom' && t.form) t.form.cpm.value = t.value; }
+  if (t.form && t.form.dataset.form === 'session') {
+    const f = t.form;
+    if (t.name === 'surah') { f.ayah.value = ''; const s = num(t.value); if (s) { const p = num(f.page.value); if (!p || surahsOnPage(p).indexOf(s) < 0) f.page.value = pageOf(s, 1); } updatePageHint(); }
+    if ((t.name === 'studentId' || t.name === 'date') && !f.id.value && !f.dataset.pageTouched) {
+      const prev = lastStop(f.studentId.value, f.date.value || today());
+      f.page.value = prev ? prev.page : ''; f.pageFrom.value = prev ? prev.page : ''; f.surah.value = prev ? (prev.surah || PAGES[prev.page - 1][0]) : ''; f.ayah.value = prev ? prev.ayah : '';
+      updatePageHint();
+    }
+    if (t.name === 'attendance') updatePageHint();
+  }
+});
+document.addEventListener('submit', async ev => {
+  const f = ev.target; ev.preventDefault();
+  const kind = f.dataset.form;
+  const btn = f.querySelector('button:not([type=button])'); if (btn) btn.disabled = true;
+  const done = () => { if (btn) btn.disabled = false; };
+  try {
+    if (kind === 'signin') {
+      const key = f.key.value.trim(); if (!key) { done(); return; }
+      const d = await call('api_signIn', key);
+      S.key = key; lsSet('rt_key', key); S.mode = 'teacher'; S.error = ''; setData(d); render();
+    } else if (kind === 'session') {
+      const att = (f.querySelector('input[name=attendance]:checked') || {}).value;
+      const x = { id: f.id.value, studentId: f.studentId.value, date: f.date.value, attendance: att, pageFrom: f.pageFrom.value, page: f.page.value, surah: f.surah.value, ayah: f.ayah.value, notes: f.notes.value };
+      const err = validateSession(x); if (err) { $('#sesserr').textContent = err; done(); return; }
+      const saved = await call('api_saveSession', S.key, x);
+      const i = S.D.sessions.findIndex(s => s.id === saved.id); if (i >= 0) S.D.sessions[i] = saved; else S.D.sessions.push(saved);
+      closeModal();
+      if (saved.date.slice(0, 7) !== S.month) S.month = saved.date.slice(0, 7);
+      render(); toast(`Saved · ${student(saved.studentId).name}${saved.page ? ' · p. ' + saved.page : ''}`);
+    } else if (kind === 'student') {
+      const s = { id: f.id.value, name: f.name.value, age: f.age.value, active: f.active.value === '1', notes: f.notes.value };
+      if (!s.name.trim()) { $('#sterr').textContent = 'Name is required.'; done(); return; }
+      const pl = planFromForm(f, s.id ? student(s.id) : null);
+      if (pl.error) { $('#sterr').textContent = pl.error; done(); return; }
+      if (pl.plan) s.plan = pl.plan;
+      const saved = await call('api_saveStudent', S.key, s);
+      const i = S.D.students.findIndex(x => x.id === saved.id); if (i >= 0) S.D.students[i] = saved; else S.D.students.push(saved);
+      closeModal(); render(); toast(s.id ? 'Student updated' : 'Student added');
+    } else if (kind === 'month') {
+      const n = classesFromForm(f);
+      if (n == null) { $('#mnerr').textContent = 'Classes must be a whole number from 1 to 31.'; done(); return; }
+      if (!/^\d{4}-\d{2}$/.test(f.month.value)) { $('#mnerr').textContent = 'Choose a month.'; done(); return; }
+      const st = (f.querySelector('input[name=mstatus]:checked') || {}).value || (monthRec(f.studentId.value, f.month.value) || {}).status || 'Open';
+      const saved = await call('api_saveMonth', S.key, { studentId: f.studentId.value, month: f.month.value, status: st, classes: n, remarks: f.remarks.value });
+      saveMonthLocal(saved); S.month = saved.month; closeModal(); render(); toast(`${monthLabel(saved.month)} saved`);
+    } else if (kind === 'settings') {
+      const r = await call('api_saveSettings', S.key, { sessionsPerMonth: f.spm.value, webAppUrl: null });
+      S.D.settings = r; render(); toast('Settings saved');
+    }
+  } catch (e) {
+    done();
+    const box = kind === 'signin' ? '#signerr' : kind === 'session' ? '#sesserr' : kind === 'student' ? '#sterr' : kind === 'month' ? '#mnerr' : '#seterr';
+    if (kind === 'signin') lsSet('rt_key', null);
+    if ($(box)) $(box).textContent = errMsg(e); else toast(errMsg(e), true);
+  }
+});
+function validateSession(x) {
+  if (!x.studentId) return 'Choose a student.';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(x.date)) return 'Choose a date.';
+  if (x.date > today()) return 'Date cannot be in the future.';
+  if (!x.attendance) return 'Choose attendance.';
+  if (x.attendance === 'Absent') return '';
+  const p = num(x.page), s = num(x.surah), a = num(x.ayah), pf = num(x.pageFrom);
+  if (p != null && (!(p >= 1 && p <= 604) || p % 1)) return 'To page must be 1–604.';
+  if (pf != null && (!(pf >= 1 && pf <= 604) || pf % 1)) return 'From page must be 1–604.';
+  if (pf != null && p == null) return 'Enter the To page as well.';
+  if (a != null && !s) return 'Choose the surah for that ayat.';
+  if (s && a != null && (!(a >= 1 && a <= AYAHS[s - 1]) || a % 1)) return `${surahName(s)} has ${AYAHS[s - 1]} ayat.`;
+  if (p && s && a && pageOf(s, a) !== p) return `${surahName(s)} ${s}:${a} is on page ${pageOf(s, a)}, not ${p}.`;
+  return '';
+}
+
+(async function boot() {
+  if (BOOT.mode === 'parent') {
+    $('#app').innerHTML = '<p style="text-align:center;padding:48px 16px">Loading…</p>';
+    try { setData(await call('getParentView', BOOT.token)); render(); }
+    catch (e) { S.mode = 'error'; S.error = errMsg(e); render(); }
+    return;
+  }
+  const k = BOOT.key || lsGet('rt_key');
+  S.mode = 'signin';
+  render();
+  if (k) {
+    try {
+      const d = await call('api_signIn', k);
+      S.key = k; S.mode = 'teacher'; lsSet('rt_key', k); setData(d); render();
+      if (BOOT.key) history.replaceState(null, '', PAGE_URL);
+    } catch (e) { lsSet('rt_key', null); if (BOOT.key) S.error = errMsg(e); render(); }
+  }
+})();
+</script>
+</body>
+</html>
