@@ -6,3 +6,6 @@
 # System files
 .DS_Store
 Thumbs.db
+
+# Apps Script project files
+*.gscript
