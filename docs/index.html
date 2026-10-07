@@ -325,6 +325,11 @@ function pageOf(s, a) {
   while (lo <= hi) { const mid = (lo + hi) >> 1; if (cmpSA(PAGES[mid], [s, a]) <= 0) { ans = mid; lo = mid + 1; } else hi = mid - 1; }
   return ans + 1;
 }
+function pageUrl(p, s, a) {
+  const onPage = num(s) && num(a) && pageOf(num(s), num(a)) === p;
+  const r = onPage ? [num(s), num(a)] : PAGES[p - 1];
+  return QURAN_URL(r[0], r[1]);
+}
 function surahsOnPage(p) {
   const start = PAGES[p - 1], next = PAGES[p] || [115, 1];
   const out = [];
@@ -605,7 +610,7 @@ function pageTab(sid) {
     ${tile('Position in mushaf', stop ? Math.round(stop.page / 604 * 100) + '%' : '—', stop ? `page ${stop.page} of 604` : '')}
   </div>`;
   const rail = stop ? `<div class="card pad" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="font-size:16px">Mushaf position</h3>
-      <a class="btn btn-sm" target="_blank" rel="noopener" href="${QURAN_URL(stop.surah, stop.ayah)}">Open page ${stop.page} ↗</a></div>
+      <a class="btn btn-sm" target="_blank" rel="noopener" href="${pageUrl(stop.page, stop.surah, stop.ayah)}">Open page ${stop.page} ↗</a></div>
       <div class="rail"><div class="fill" style="width:${stop.page / 604 * 100}%"></div>${Array.from({ length: 29 }, (_, i) => `<span class="tick" style="left:${(22 + 20 * i) / 604 * 100}%"></span>`).join('')}</div>
       <div class="railscale">${[[1, 1], [10, 182], [20, 382], [30, 582]].map(([j, p]) => `<span style="left:${(p - 1) / 604 * 100}%">Juz ${j}</span>`).join('')}</div></div>` : '';
   const pts = sessOf(sid).filter(x => num(x.page));
@@ -773,7 +778,7 @@ function updatePageHint() {
   if (!p || p < 1 || p > 604) { h.className = 'hint'; h.innerHTML = 'Enter the mushaf page (Madani, 604 pages).'; return; }
   const st = PAGES[p - 1], pf = num(f.pageFrom.value);
   const adv = pf >= 1 && pf <= 604 ? `<b>${p - pf >= 0 ? '+' : ''}${p - pf} page${Math.abs(p - pf) === 1 ? '' : 's'}</b> this session${p < pf ? ' (going back: revision?)' : ''} · ` : '';
-  let html = adv + `Page ${p} starts at <b>${esc(surahName(st[0]))} ${st[0]}:${st[1]}</b> · Juz ${juzOf(p)} · <a target="_blank" rel="noopener" href="${QURAN_URL(s || st[0], a || (s ? 1 : st[1]))}">Open ↗</a>`;
+  let html = adv + `Page ${p} starts at <b>${esc(surahName(st[0]))} ${st[0]}:${st[1]}</b> · Juz ${juzOf(p)} · <a target="_blank" rel="noopener" href="${pageUrl(p, s, a)}">Open page ${p} ↗</a>`;
   let warn = false;
   if (s && a) {
     if (a > AYAHS[s - 1]) { html = `${esc(surahName(s))} has only ${AYAHS[s - 1]} ayat.`; warn = true; }
