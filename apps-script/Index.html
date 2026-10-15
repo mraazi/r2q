@@ -194,7 +194,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;margin:0
 .legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
 
 /* Segmented tabs */
-.tabs{position:sticky;top:58px;z-index:10;display:flex;gap:4px;padding:4px;margin:16px 0;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 12px rgba(245,240,232,.9)}
+.tabs{position:sticky;top:var(--stick,58px);z-index:10;display:flex;gap:4px;padding:4px;margin:16px 0;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 12px rgba(245,240,232,.9)}
 .tabs button{flex:1;background:none;border:0;padding:9px 6px;font-weight:600;font-size:14px;color:var(--ink-3);cursor:pointer;border-radius:10px;white-space:nowrap}
 .tabs button.on{background:var(--teal);color:#fff;box-shadow:0 2px 6px rgba(47,107,94,.3)}
 
@@ -241,7 +241,7 @@ table.t tr:last-child td{border-bottom:0}
 .seg button.on.s2{background:var(--st2);border-color:var(--st2);color:#15332b}
 .seg button.on.s3{background:var(--st3);border-color:var(--st3);color:#fff}
 .seg button.on.s4{background:var(--st4);border-color:var(--st4);color:#fff}
-.editbar{position:sticky;top:64px;z-index:11;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;margin-bottom:12px;background:#fffaf0;border:1px solid #e7d7aa;border-radius:14px;box-shadow:var(--shadow)}
+.editbar{position:sticky;top:calc(var(--stick,58px) + 6px);z-index:11;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;margin-bottom:12px;background:#fffaf0;border:1px solid #e7d7aa;border-radius:14px;box-shadow:var(--shadow)}
 .editbar .grow{flex:1}
 
 /* Forms */
@@ -440,6 +440,75 @@ input.i:focus,select.i:focus,textarea.i:focus{outline:2px solid var(--sage);outl
 .changes li{margin:3px 0;font-size:13px}
 .foot{display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--ink-3);font-size:12px;margin:28px 0 12px}
 
+/* Desktop: sidebar layout (hidden on phones) */
+.side,.crumb{display:none}
+.inst-help{font-size:14px;color:var(--ink-2)}
+.inst-help ol{margin:8px 0 0;padding-left:20px}
+.inst-help li{margin:4px 0}
+.kbd{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border:1px solid var(--line-2);border-radius:6px;background:var(--surface-2);font-size:12px;font-weight:600;vertical-align:middle}
+.igrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.icard{padding:20px}
+.icard h3{display:flex;align-items:center;gap:10px;font-size:17px;color:var(--teal-dk);margin-bottom:8px}
+.icard h3 svg{width:22px;height:22px;color:var(--gold-ink)}
+.icard ol{margin:0;padding-left:20px;font-size:14px;color:var(--ink-2);line-height:1.6}
+@keyframes pop{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+@media (min-width:960px){
+  html,body{background:var(--bg)}
+  body:before{display:none}
+  .shell{max-width:none;box-shadow:none!important;display:grid;grid-template-columns:264px minmax(0,1fr);align-items:start}
+  .shell.solo{grid-template-columns:minmax(0,1fr)}
+  .shell.has-tabbar{padding-bottom:0}
+  .pane{min-width:0;min-height:100vh}
+  .tabbar,.fab{display:none}
+  .shell.teacher{--stick:16px}
+  .shell.teacher .appbar{display:none}
+  .shell.teacher .crumb{display:inline-flex;align-items:center;gap:4px;border:0;background:none;color:var(--gold-lt);font-weight:600;font-size:13px;padding:6px 0;margin:0 0 6px;cursor:pointer}
+  .crumb svg{width:16px;height:16px}
+  .side{display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh;height:100dvh;overflow:auto;padding:22px 16px 16px;background:var(--teal-dk);color:#fff;isolation:isolate}
+  .side:before{content:"";position:absolute;inset:0;background-image:var(--lattice);opacity:.08;pointer-events:none;z-index:-1}
+  .side .sbrand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:19px;font-weight:600;padding:2px 8px 18px}
+  .side .sbrand .ar{margin-left:auto;font-size:16px;color:var(--gold-lt)}
+  .side .snav{display:flex;flex-direction:column;gap:3px;margin-top:14px}
+  .side .snav button{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:0 12px;border:0;border-radius:12px;background:none;color:rgba(255,255,255,.8);font-weight:600;font-size:15px;cursor:pointer;text-align:left;transition:background .15s,color .15s}
+  .side .snav button svg{width:21px;height:21px;flex:none}
+  .side .snav button:hover{background:rgba(255,255,255,.08);color:#fff}
+  .side .snav button.on{background:rgba(217,192,122,.16);color:#fff;box-shadow:inset 3px 0 0 var(--gold-lt)}
+  .side .shead{margin:20px 12px 6px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(217,192,122,.85)}
+  .side .slist button{font-size:14px;font-weight:500;min-height:40px}
+  .side .slist .av{width:28px;height:28px}
+  .side .slist .av b{font-size:12px}
+  .side .slist span.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .side .sbot{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .side .sdate{padding:12px 12px 4px;border-top:1px solid rgba(255,255,255,.12);font-size:12px;color:rgba(255,255,255,.72)}
+  .side .sdate .ar{display:block;font-size:18px;color:var(--gold-lt);line-height:1.6}
+  .side .btn-glass{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.22);color:#fff}
+  .side .btn-glass:hover{background:rgba(255,255,255,.14)}
+  .side :focus-visible{outline-color:var(--gold-lt)}
+  .inner{max-width:1120px;margin:0 auto}
+  .hero{padding:30px 40px 60px}
+  .hero h1{font-size:34px}
+  .hstats{grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+  .hs{padding:14px 16px}
+  .hs .val{font-size:30px}
+  .content{margin-top:-34px;border-radius:28px 28px 0 0;padding:30px 40px 56px}
+  .content:before{display:none}
+  .stack.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .search{max-width:420px}
+  .tiles{grid-template-columns:repeat(4,1fr)}
+  .sgrid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:24px;align-items:start}
+  .sside{position:sticky;top:16px}
+  .shell.solo .sside{top:74px}
+  .sside .mstrip{flex-wrap:wrap;overflow:visible;margin:0 0 10px;padding:0}
+  .smain > .tabs:first-child{margin-top:0}
+  .tgroups{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+  .tgroups .tgroup{margin-bottom:0}
+  .narrow{max-width:760px}
+  .modal{align-items:center;padding:24px}
+  .sheet{border-radius:22px;max-width:560px;max-height:88vh;padding-bottom:0;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:pop .18s ease-out}
+  .sheet:before{display:none}
+  .sheet-h{padding-top:20px}
+  .shell.teacher ~ .toast,.toast{bottom:28px}
+}
 @media (max-width:360px){
   .hero h1{font-size:24px}
   .hs .val,.tile .val{font-size:21px}
@@ -458,6 +527,7 @@ input.i:focus,select.i:focus,textarea.i:focus{outline:2px solid var(--sage);outl
 <div id="app"></div>
 <div id="modal"></div>
 <script>
+var PWA = false;
 var BOOT = <?!= bootJson ?>;
 </script>
 <script>
@@ -659,8 +729,23 @@ const IC = {
   check: ic('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
   chart: ic('<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'),
   phone: ic('<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>'),
+  download: ic('<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14"/>'),
+  monitor: ic('<rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M9 20h6M12 16.5V20"/>'),
   heart: ic('<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/>')
 };
+const isStandalone = () => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } };
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+function installHelp() {
+  if (isStandalone()) return `<div class="inst-help">${IC.check} You're using the installed app.</div>`;
+  if (isIOS()) return `<div class="inst-help">To install on iPhone or iPad:<ol><li>Open this page in <b>Safari</b>.</li><li>Tap <b>Share</b>.</li><li>Choose <b>Add to Home Screen</b>.</li></ol></div>`;
+  return `<div class="inst-help"><p style="margin:0 0 12px">Install it on this device so it opens in its own window, like an app.</p>${installBtn('btn-primary btn-block')}
+    <div class="${S.installEvt ? 'hidden' : ''} inst-alt">In Chrome or Edge, use the <b>install</b> icon in the address bar or the browser menu (<b>⋮</b>) and choose <b>Install app</b> or <b>Add to Home screen</b>.</div></div>`;
+}
+window.addEventListener('beforeinstallprompt', ev => {
+  ev.preventDefault(); S.installEvt = ev;
+  $$('.inst').forEach(b => b.classList.remove('hidden')); $$('.inst-alt').forEach(b => b.classList.add('hidden'));
+});
+window.addEventListener('appinstalled', () => { S.installEvt = null; $$('.inst').forEach(b => b.classList.add('hidden')); toast('App installed'); });
 function hijriToday() {
   try { return new Intl.DateTimeFormat('en-GB-u-ca-islamic-umalqura', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date()); }
   catch (e) { return ''; }
@@ -678,7 +763,7 @@ function render() {
   else if (S.view === 'register') v = registerView();
   else if (S.view === 'settings') v = settingsView();
   else { S.view = 'home'; v = homeView(); }
-  app.innerHTML = `<div class="shell ${isTeacher() ? 'has-tabbar' : ''}">${appbar()}<section class="hero">${v.hero}</section><main class="content">${v.body}</main>${tabbar()}</div>`;
+  app.innerHTML = `<div class="shell ${isTeacher() ? 'has-tabbar teacher' : 'solo'}">${sidebar()}<div class="pane">${appbar()}<section class="hero"><div class="inner">${v.hero}</div></section><main class="content"><div class="inner">${v.body}</div></main></div>${tabbar()}</div>`;
   drawCharts();
 }
 function appbar() {
@@ -693,6 +778,18 @@ function tabbar() {
   return `<nav class="tabbar">${b('home', 'Students', IC.users, S.view === 'home' || S.view === 'student')}<span class="gap"></span>${b('register', 'Attendance', IC.cal, S.view === 'register')}</nav>
     <button class="fab" data-act="log" aria-label="Log session">${IC.plus}</button>`;
 }
+function sidebar() {
+  if (!isTeacher()) return '';
+  const b = (v, l, icon, on) => `<button data-act="nav" data-v="${v}" class="${on ? 'on' : ''}" ${on ? 'aria-current="page"' : ''}>${icon}<span>${l}</span></button>`;
+  const hj = hijriToday();
+  const list = activeStudents().map(st => `<button data-act="open-student" data-id="${esc(st.id)}" class="${S.view === 'student' && S.sid === st.id ? 'on' : ''}">${AV(st.name)}<span class="nm">${esc(st.name)}</span></button>`).join('');
+  return `<aside class="side" aria-label="Main menu"><div class="sbrand">${STAR(28, '#D9C07A')}<span>Recitation Tracker</span></div>
+    <button class="btn btn-gold btn-block" data-act="log">${IC.plus} Log session</button>
+    <nav class="snav">${b('home', 'Students', IC.users, S.view === 'home')}${b('register', 'Attendance', IC.cal, S.view === 'register')}${b('settings', 'Settings', IC.gear, S.view === 'settings')}</nav>
+    ${list ? `<div class="shead">Your students</div><nav class="snav slist" aria-label="Students">${list}</nav>` : ''}
+    <div class="sbot">${installBtn('btn-glass btn-block')}<div class="sdate"><span class="ar">السلام عليكم</span>${fmtDate(today(), true)}${hj ? '<br>' + esc(hj) : ''}</div></div></aside>`;
+}
+const installBtn = cls => PWA && !isStandalone() ? `<button class="btn ${cls} inst ${S.installEvt ? '' : 'hidden'}" data-act="install">${IC.download} Install app</button>` : '';
 function monthBar() {
   const first = earliestMonth();
   return `<div class="monthbar"><button data-act="month" data-d="-1" ${S.month <= first ? 'disabled' : ''} aria-label="Previous month">${IC.chevL}</button><div class="m" aria-live="polite">${monthLabel(S.month)}</div><button data-act="month" data-d="1" ${S.month >= latestMonth() ? 'disabled' : ''} aria-label="Next month">${IC.chevR}</button></div>`;
@@ -714,6 +811,7 @@ function landingView() {
   return `<div class="land">
     <div class="land-dark">
       <header class="lnav"><div class="lwrap"><span class="lbrand">${STAR(30, '#D9C07A')}Recitation Tracker</span>
+        ${installBtn('btn-sm')}
         <button class="btn btn-sm" data-act="goto" data-v="access" aria-label="Teacher sign in">${IC.lock}<span>Teacher sign in</span></button></div></header>
       <section class="lwrap lhero">
         <div><div class="bism" lang="ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
@@ -748,6 +846,13 @@ function landingView() {
         <div class="card acard parent" id="parents"><div class="fi">${IC.heart}</div><h3>For parents</h3><p>No sign-in needed. Open the private link your child's teacher sent you, usually on WhatsApp.</p>
           <ul>${li('See the page and surah your child reached')}${li('Follow tajweed progress and the teacher\'s monthly remark')}${li('Check attendance and makeup classes')}${li('Lost the link? Ask the teacher to send it again')}</ul></div>
       </div></div></section>
+    ${PWA && !isStandalone() ? `<section class="lsec alt"><div class="lwrap">
+      <div class="lhead"><span class="kicker"><span class="orn"></span>Install<span class="orn"></span></span><h2>Use it like an app</h2><p>Add it to your phone's home screen or your computer. It opens in its own window, with no app store needed.</p></div>
+      <div class="igrid">
+        <div class="card icard"><h3>${IC.phone}iPhone &amp; iPad</h3><ol><li>Open this page in <b>Safari</b>.</li><li>Tap <b>Share</b> at the bottom of the screen.</li><li>Choose <b>Add to Home Screen</b>.</li></ol></div>
+        <div class="card icard"><h3>${IC.phone}Android</h3><ol><li>Open this page in <b>Chrome</b>.</li><li>Tap the <b>⋮</b> menu.</li><li>Choose <b>Install app</b> or <b>Add to Home screen</b>.</li></ol></div>
+        <div class="card icard"><h3>${IC.monitor}Computer</h3><ol><li>Open this page in <b>Chrome</b> or <b>Edge</b>.</li><li>Click the <b>install</b> icon at the right of the address bar.</li><li>Choose <b>Install</b>.</li></ol></div>
+      </div><div style="text-align:center;margin-top:20px">${installBtn('btn-primary btn-lg')}</div></div></section>` : ''}
     <footer class="lfoot"><div class="lwrap"><span class="ar" lang="ar">خَيْرُكُمْ مَنْ تَعَلَّمَ ٱلْقُرْآنَ وَعَلَّمَهُ</span>
       <q>The best of you are those who learn the Quran and teach it.</q><small>Sahih al-Bukhari 5027</small>
       <div class="brandline">${STAR(18, '#B8963E')}Recitation Tracker</div></div></footer>
@@ -802,7 +907,7 @@ function homeView() {
   const onboard = `<div class="card onboard">${STAR(44, '#B8963E')}<h3>Welcome! Let's add your first student</h3><p class="small muted" style="margin:0">It takes about a minute to get started.</p>
     <ol><li>Add a student with their name and classes per month.</li><li>Tap the gold <b>+</b> button after each class to log the session.</li><li>Send the parent link from the student's page.</li></ol>
     ${isTeacher() ? `<button class="btn btn-primary btn-block" data-act="add-student">${IC.plus} Add student</button>` : ''}</div>`;
-  const body = list.length ? `${search}<div class="stack">${cards}</div><div class="card empty hidden" id="noresults">No student matches that name.</div>` : onboard;
+  const body = list.length ? `${search}<div class="stack cards">${cards}</div><div class="card empty hidden" id="noresults">No student matches that name.</div>` : onboard;
   return { hero, body };
 }
 const hs = (l, v, s) => `<div class="hs"><div class="lbl">${l}</div><div class="val">${v}</div><div class="sub">${s || ''}</div></div>`;
@@ -820,7 +925,7 @@ function studentView(sid) {
   const st = student(sid);
   const tabs = [['page', 'Page'], ['tajweed', 'Tajweed'], ['attendance', 'Attendance']];
   const inactive = st.active === false || st.active === 'FALSE';
-  const hero = `${isTeacher() ? '' : '<div class="eyebrow en">Recitation progress report</div>'}
+  const hero = `${isTeacher() ? `<button class="crumb" data-act="nav" data-v="home">${IC.chevL}All students</button>` : '<div class="eyebrow en">Recitation progress report</div>'}
     <div class="who" style="margin-top:8px">${AV(st.name)}<div style="min-width:0"><h1>${esc(st.name)}</h1>
       <div class="sub">${st.age !== '' && st.age != null ? esc(st.age) + ' years · ' : ''}${plannedFor(st, S.month)} classes / month ${inactive ? '<span class="badge off">Inactive</span>' : ''}</div></div></div>
     ${isTeacher() ? `<div class="acts">
@@ -831,11 +936,11 @@ function studentView(sid) {
   if (S.tab === 'tajweed') tb = tajweedTab(sid);
   else if (S.tab === 'attendance') tb = attendanceTab(sid);
   else tb = pageTab(sid);
-  const body = `${monthStrip(sid)}
-    ${monthCard(sid)}
-    <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" data-act="tab" data-v="${k}" class="${S.tab === k ? 'on' : ''}">${l}</button>`).join('')}</div>
-    ${tb}
-    ${!isTeacher() ? `<div class="foot"><span class="orn"></span>Updated by the teacher after each session.<span class="orn"></span></div>` : ''}`;
+  const body = `<div class="sgrid"><aside class="sside">${monthStrip(sid)}
+    ${monthCard(sid)}</aside>
+    <div class="smain"><div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${S.tab === k}" data-act="tab" data-v="${k}" class="${S.tab === k ? 'on' : ''}">${l}</button>`).join('')}</div>
+    ${tb}</div></div>
+    ${!isTeacher() ? `<div class="foot"><span class="orn"></span>Updated by the teacher after each session.<span class="orn"></span></div><div style="text-align:center">${installBtn('btn-sm')}</div>` : ''}`;
   return { hero, body };
 }
 
@@ -931,7 +1036,7 @@ function tajweedTab(sid) {
     }).join('');
     return `<div class="card tgroup"><div class="tgroup-h"><h3>${esc(g.name)}</h3><span class="orn"></span></div>${rows}</div>`;
   }).join('');
-  return top + groups;
+  return top + `<div class="tgroups">${groups}</div>`;
 }
 const stChip = s => `<span class="st s${statusIdx(s)}">${esc(s || 'Not assessed')}</span>`;
 
@@ -991,10 +1096,11 @@ function settingsView() {
           <div class="err" id="seterr"></div>
           <button class="btn btn-primary btn-block">Save settings</button>
         </form></div>
+    ${PWA ? secTitle('Install the app') + `<div class="card pad">${installHelp()}</div>` : ''}
     ${secTitle('This device')}
     <div class="card pad"><p class="small muted" style="margin-top:0">Your teacher key is remembered on this browser so you don't need to re-enter it.</p>
         <div style="display:flex;gap:8px"><button class="btn" style="flex:1" data-act="refresh">Reload data</button><button class="btn btn-danger" style="flex:1" data-act="signout">Sign out</button></div></div>`;
-  return { hero, body };
+  return { hero, body: `<div class="narrow">${body}</div>` };
 }
 
 function openModal(title, body, foot, form) {
@@ -1246,6 +1352,12 @@ const ACT = {
   },
   async refresh() { try { setData(await call('api_bootstrap', S.key)); render(); toast('Data reloaded'); } catch (e) { toast(errMsg(e), true); } },
   signout() { lsSet('rt_key', null); S.mode = 'signin'; S.key = null; S.error = ''; render(); window.scrollTo(0, 0); },
+  async install() {
+    const ev = S.installEvt; if (!ev) return;
+    ev.prompt();
+    try { await ev.userChoice; } catch (e) {}
+    S.installEvt = null; $$('.inst').forEach(b => b.classList.add('hidden'));
+  },
   goto(el) {
     const t = document.getElementById(el.dataset.v); if (!t) return;
     t.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
@@ -1311,7 +1423,7 @@ document.addEventListener('submit', async ev => {
     if (kind === 'signin') {
       const key = f.key.value.trim(); if (!key) { done(); return; }
       const d = await call('api_signIn', key);
-      S.key = key; lsSet('rt_key', key); S.mode = 'teacher'; S.error = ''; setData(d); render();
+      S.key = key; lsSet('rt_key', key); lsSet('rt_parent', null); S.mode = 'teacher'; S.error = ''; setData(d); render();
     } else if (kind === 'session') {
       const att = (f.querySelector('input[name=attendance]:checked') || {}).value;
       const x = { id: f.id.value, studentId: f.studentId.value, date: f.date.value, attendance: att, pageFrom: f.pageFrom.value, page: f.page.value, surah: f.surah.value, ayah: f.ayah.value, notes: f.notes.value };
