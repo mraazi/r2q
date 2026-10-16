@@ -2,7 +2,7 @@
 // The page itself is fetched network-first so updates show up straight away;
 // icons and fonts are served from cache. Calls to the Apps Script API are
 // never intercepted.
-const CACHE = 'rt-v1';
+const CACHE = 'rt-v2';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/favicon-64.png'];
 
 self.addEventListener('install', e => {
