@@ -41,11 +41,14 @@ You can also open the plain `/exec` URL and type your teacher key. The browser r
 - **Months**: each student's page has a row of month chips (for example Sep 2026 ✓ and Oct 2026). **+ Add month** opens the next month, where you set its number of classes and an optional remark for parents. Use **✓ Mark completed** when a month is done, or **Edit month** to change its classes, status or remark. Removing a month only deletes the month entry. Its sessions stay.
 - **From / To page**: each session records where the student started and finished. From defaults to the last session's To page. The month card and Page tab then show the month's start page, end page and pages covered.
 - **+ Log session**: record the date, attendance (Present, Absent or Replacement), the page reached, the surah and optionally the ayat, plus any notes. The page defaults to the student's last stop. The app warns you if the surah/ayat doesn't match the page.
+- **Reading path**: under **Edit** on a student's page. *Straight through* reads from Al-Fatihah onward. *Al-Fatihah, then Juz Amma, then Al-Baqarah* covers Al-Fatihah, then Juz Amma surah by surah from An-Nas back to An-Naba, then Al-Baqarah onward. On that path, progress in Juz Amma counts in surahs, the student page shows the 37 surahs as they are completed, and **+ Log session** offers a **Next surah** button.
 - **Student → Tajweed → Update assessment**: set a status (Not yet, Learning, Fair or Mastered) and a remark for each topic. Each save is dated, so the monthly view shows what changed.
 - **Student → Parent link**: copy the link or send it by WhatsApp. It is read-only and shows that one child only. **Reset link** kills the old link immediately.
 - **Attendance tab (top)**: shows the month register for all students.
 
 ## Updating the code later
+
+If the update adds a new column (the reading path added `path` to **Students**), also run `setup` once so the column gets its heading. It is safe to re-run and doesn't touch your data.
 
 After you paste new code, go to **Deploy → Manage deployments → pencil icon → Version: New version → Deploy**. The URL stays the same, so parent links keep working. Clicking "New deployment" instead would give you a new URL.
 

@@ -48,7 +48,7 @@ var TOPIC_GROUPS = [
 ];
 
 var SHEETS = {
-  Students: ['id', 'name', 'age', 'token', 'active', 'notes', 'createdAt', 'plan'],
+  Students: ['id', 'name', 'age', 'token', 'active', 'notes', 'createdAt', 'plan', 'path'],
   Sessions: ['id', 'studentId', 'date', 'attendance', 'page', 'surah', 'ayah', 'notes', 'updatedAt', 'pageFrom'],
   Tajweed:  ['id', 'studentId', 'date', 'topicId', 'status', 'remarks', 'updatedAt'],
   Months:   ['id', 'studentId', 'month', 'status', 'classes', 'remarks', 'updatedAt']
@@ -56,7 +56,7 @@ var SHEETS = {
 // Columns stored as plain text so Sheets never auto-converts them (dates, ids, and
 // free text that starts with "=" or "+" would otherwise be parsed as formulas)
 var TEXT_COLS = {
-  Students: ['id', 'name', 'token', 'notes', 'plan'],
+  Students: ['id', 'name', 'token', 'notes', 'plan', 'path'],
   Sessions: ['id', 'studentId', 'date', 'notes'],
   Tajweed:  ['id', 'studentId', 'date', 'topicId', 'remarks'],
   Months:   ['id', 'studentId', 'month', 'remarks']
@@ -147,7 +147,8 @@ function api_saveStudent(key, s) {
       active: s.active === false || s.active === 'FALSE' ? false : true,
       notes: clean_(s.notes, 500),
       createdAt: existing ? existing.createdAt : nowIso_(),
-      plan: s.plan != null ? cleanPlan_(s.plan) : (existing ? existing.plan : '')
+      plan: s.plan != null ? cleanPlan_(s.plan) : (existing ? existing.plan : ''),
+      path: s.path != null ? cleanPath_(s.path) : (existing ? existing.path || '' : '')
     };
     upsert_('Students', row);
     return row;
@@ -286,7 +287,7 @@ function getParentView(token) {
   var st = readTable_('Students').filter(function (s) { return s.token === token; })[0];
   if (!st || st.active === false || st.active === 'FALSE') throw new Error('This link is not valid. Please ask the teacher for a new one.');
   return {
-    student: { id: st.id, name: st.name, age: st.age, plan: st.plan },
+    student: { id: st.id, name: st.name, age: st.age, plan: st.plan, path: st.path || '' },
     sessions: readTable_('Sessions').filter(function (r) { return r.studentId === st.id; })
       .map(function (r) { return { date: r.date, attendance: r.attendance, pageFrom: r.pageFrom, page: r.page, surah: r.surah, ayah: r.ayah, notes: r.notes }; }),
     tajweed: readTable_('Tajweed').filter(function (r) { return r.studentId === st.id; })
@@ -585,6 +586,14 @@ function toInt_(v, min, max, label) {
  * Classes-per-month plan: [{from: 'YYYY-MM', n: 1..31}], each entry applies from its month onward.
  * Stored as JSON text so a change (e.g. 8 -> 4 from November) never rewrites past months' targets.
  */
+/** Reading path: '' reads straight through from Al-Fatihah; 'juzamma' is Al-Fatihah, then Juz Amma from An-Nas back to An-Naba, then Al-Baqarah onward. */
+var PATHS = ['', 'juzamma'];
+function cleanPath_(p) {
+  p = String(p || '');
+  if (PATHS.indexOf(p) < 0) throw new Error('Unknown reading path.');
+  return p;
+}
+
 function cleanPlan_(p) {
   if (typeof p === 'string') { if (!p) return ''; try { p = JSON.parse(p); } catch (e) { throw new Error('Invalid class plan.'); } }
   if (!Array.isArray(p)) throw new Error('Invalid class plan.');
